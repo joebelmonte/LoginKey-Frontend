@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
+    <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
+
+
+</head>
+<body>
+    <div id="header">
+        <h1>LoginKey Generator</h1>
+            <p id="nav-bar">
+            <a href="#" id="show-groups">Groups</a>
+            <a href="#" id="show-new-group">New Group</a>
+            <a href="#" id="show-profile">Profile</a>
+            <a href="#" id="show-log-out">Log Out</a>
+        </p>
+    </div>
+
+    <div id="sign-up">
+        <form>
+            <input type="text" id="sign-up-email" name="sign-up-email" placeholder="email" autocomplete="username" required><br>
+            <input type="password" id="sign-up-password" name="sign-up-password" placeholder="password (min 6 characters)" autocomplete="new-password" required><br>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="confirm password" autocomplete="new-password" required><br>
+            <div class="btn-group">
+                <button id="sign-up-button">Sign Up</button> 
+                <button id="cancel-sign-up">Cancel</button>
+            </div>
+        </form>
+    </div> 
+    <div id="sign-in">
+        <form>
+            <input type="text" id="sign-in-email" name="sign-in-email" placeholder="email" autocomplete="username" required><br>
+            <input type="password" id="sign-in-password" name="sign-in-password" placeholder="password" autocomplete="curent-password" required><br>
+            <div class="btn-group">
+                <button id="sign-in-button">Sign In</button> 
+                <button id="cancel-sign-in">Cancel</button>
+            </div>
+        </form>
+    </div>  
+    <div id="new-group">
+        <h2>Enter a New Group</h2>
+        <form>
+            <input type="text" id="new-group-name" name="new-group-name" placeholder="Group name" required><br>
+            <input type="text" id="new-group-partnerID" name="new-group-partnerID" placeholder="Partner ID" required><br>
+            <input type="password" id="new-group-ApiKey" name="new-group-ApiKey" placeholder="API Key" autocomplete="none" required><br>
+            <input type="text" id="new-group-PUID" name="new-group-PUID" placeholder="Partner User ID" required><br>
+            <input type="text" id="new-group-timeout-relative" name="new-group-timeout-relative" placeholder="Timeout (seconds from now)" required><br>
+            <input type="text" id="new-group-timeout-absolute" name="new-group-timeout-absolute" placeholder="Timeout (absolute time in UTC)" required><br>
+        <div class="btn-group">
+            <button id="new-group-save-button">Save</button> 
+            <button id="new-group-cancel-button">Cancel</button>
+        </div>
+        </form>
+    </div> 
+    <div id="update-group">
+        <h2>Update Group</h2>
+        <form>
+            <input type="text" id="update-group-name" name="update-group-name" placeholder="Group name"><br>
+            <input type="text" id="update-group-partnerID" name="update-group-partnerID" placeholder="Partner ID"><br>
+            <input type="password" id="update-group-ApiKey" name="update-group-ApiKey" placeholder="API Key" autocomplete="none"><br>
+            <input type="text" id="update-group-PUID" name="update-group-PUID" placeholder="Partner User ID"><br>
+            <input type="text" id="update-group-timeout-relative" name="update-group-timeout-relative" placeholder="Timeout (seconds from now)"><br>
+            <input type="text" id="update-group-timeout-absolute" name="update-group-timeout-absolute" placeholder="absolute time in (UTC)"><br>
+        <div class="btn-group">
+            <button id="update-group-save-button">Save</button> 
+            <button id="update-group-cancel-button">Cancel</button>
+        </div>
+        </form>
+    </div>
+    <div id="user-profile">
+        <h2>User Profile</h2>
+        <form>
+            <input type="text" id="update-username" name="update-username" placeholder="Username" autocomplete="username"><br>
+            <input type="password" id="update-password" name="update-password" placeholder="Password" autocomplete="new-password"><br>
+            <input type="password" id="update-password-confirm" name="update-password-confirm" placeholder="Confirm Password" autocomplete="new-password"><br>
+        <div class="btn-group">
+            <button id="update-user-save-button">Update UN/PW</button> 
+            <button id="delete-all-groups-button">Delete All Groups</button> 
+            <button id="logout-all">Logout From All Devices</button> 
+            <button id="delete-account">Delete Account</button><br><br>
+            <button id="update-user-cancel-button">Cancel</button>
+        </div>
+        </form>
+    </div>
+     <div id="groups">
+         <div class="group">
+            <h2>JB Demo</h2>
+            <p>Partner ID: 20541</p>
+            <p>Partner User ID: Jbelmonte</p>
+            <p>Timeout (seconds): 3600</p>
+            <p>Login Key: $1$1595124371$g4kwIB8Pq2_JwInJ2pYyCuUWsLtdMKySUFyEmEvw0s4</p>
+            <p>Expires: Sun, 19 Jul 2020 02:06:11 GMT</p>
+            <a href="#">Agent Join Page</a>
+            <a href="#">Glance Client</a>
+            <div class="btn-group">
+                <button id="delete-this-group">Delete Group</button> 
+                <button id="edit-this-group">Edit this group</button> 
+                <button id="refresh-key">Refresh Key</button> 
+            </div>
+        </div>
+        <div class="group">
+            <h2>JB Demo</h2>
+            <p>Partner ID: 20541</p>
+            <p>Partner User ID: Jbelmonte</p>
+            <p>Timeout (seconds): 3600</p>
+            <p>Login Key: $1$1595124371$g4kwIB8Pq2_JwInJ2pYyCuUWsLtdMKySUFyEmEvw0s4</p>
+            <p>Expires: Sun, 19 Jul 2020 02:06:11 GMT</p>
+            <a href="#">Agent Join Page</a>
+            <a href="#">Glance Client</a>
+            <div class="btn-group">
+                <button id="delete-this-group">Delete Group</button> 
+                <button id="edit-this-group">Edit this group</button> 
+                <button id="refresh-key">Refresh Key</button> 
+            </div>
+        </div>
+        <div class="group">
+            <h2>JB Demo</h2>
+            <p>Partner ID: 20541</p>
+            <p>Partner User ID: Jbelmonte</p>
+            <p>Timeout (seconds): 3600</p>
+            <p>Login Key: $1$1595124371$g4kwIB8Pq2_JwInJ2pYyCuUWsLtdMKySUFyEmEvw0s4</p>
+            <p>Expires: Sun, 19 Jul 2020 02:06:11 GMT</p>
+            <a href="#">Agent Join Page</a>
+            <a href="#">Glance Client</a>
+            <div class="btn-group">
+                <button id="delete-this-group">Delete Group</button> 
+                <button id="edit-this-group">Edit this group</button> 
+                <button id="refresh-key">Refresh Key</button> 
+            </div>
+        </div>
+    </div>
+<script type="module" src="/js/config.js"></script>
+<script type="module" src="/js/signup.js"></script>
+</body>
+
+</html>
