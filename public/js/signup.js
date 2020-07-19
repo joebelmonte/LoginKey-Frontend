@@ -1,4 +1,10 @@
-import apiBaseURL from './config.js'
+import config from './config.js'
+
+console.log('the config is ', config)
+
+config.authToken = 'i modified the auth token'
+
+console.log('the config is ', config)
 
 var signUp = async (e) => {
     e.preventDefault()

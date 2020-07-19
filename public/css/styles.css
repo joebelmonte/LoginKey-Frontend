@@ -113,12 +113,50 @@ input {
 
   #groups {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .group {
     background-color: #EEEEEE;
     border: #EF861D 2px solid;
     /* width: 50%;
     margin: auto; */
     border-radius: 25px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
+    margin: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
   }
-  
+
+
+  .group .btn-group {
+    text-align: center;
+  }
+
+  .delete-this-group {
+    background-color: #fc030b !important;
+  }
+
+  .delete-this-group:hover {
+    background-color: #fa7075 !important;
+  }
+
+  .edit-this-group {
+    background-color: #fcfc03 !important;
+    color: #383838 !important;
+  }
+
+  .edit-this-group:hover {
+    background-color: #ffffa3 !important;
+  }
+
+  .refresh-key {
+    background-color: #03fc20 !important;
+    color: #383838 !important;
+  }
+
+  .refresh-key:hover {
+    background-color: #9cffa7 !important;
+  }
+
