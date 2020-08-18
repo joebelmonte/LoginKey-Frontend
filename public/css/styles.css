@@ -82,15 +82,15 @@ input {
 }
 
 .btn-group button {
-    background-color: #EF861D; /* orange background */
-    border: 2px solid #383838; /* orange border */
-    color: white; /* White text */
-    /* padding: 10px 24px; Some padding */
-    cursor: pointer; /* Pointer/hand icon */
-    /* float: left; Float the buttons side by side */
-    /* margin: 25px 10px 10px 0px; */
-    border-radius: 50px;
-  }
+  background-color: #EF861D; /* orange background */
+  border: 2px solid #383838; /* orange border */
+  color: white; /* White text */
+  /* padding: 10px 24px; Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  /* float: left; Float the buttons side by side */
+  /* margin: 25px 10px 10px 0px; */
+  border-radius: 50px;
+}
   
   /* Clear floats (clearfix hack) */
 /* .btn-group:after {
@@ -102,61 +102,75 @@ input {
 
   /* Add a background color on hover */
 .btn-group button:hover {
-    background-color: #F79841;
-  }
+  background-color: #F79841;
+}
 
-  .btn-group button {
-    margin: 0px 10px;
-    height: 40px;
-    width: 100px;
-  }
+.btn-group button {
+  margin: 0px 10px;
+  height: 40px;
+  width: 100px;
+}
 
-  #groups {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
+#groups {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
   
-  .group {
-    background-color: #EEEEEE;
-    border: #EF861D 2px solid;
-    /* width: 50%;
-    margin: auto; */
-    border-radius: 25px;
-    margin: 15px;
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 15px;
-  }
+.group {
+  background-color: #EEEEEE;
+  border: #EF861D 2px solid;
+  /* width: 50%;
+  margin: auto; */
+  border-radius: 25px;
+  margin: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+}
 
 
-  .group .btn-group {
-    text-align: center;
-  }
+.group .btn-group {
+  text-align: center;
+}
 
-  .delete-this-group {
-    background-color: #fc030b !important;
-  }
+.delete-this-group, .update-group-cancel-button, #delete-account, #delete-all-groups-button {
+  background-color: #fc030b !important;
+}
 
-  .delete-this-group:hover {
-    background-color: #fa7075 !important;
-  }
+.delete-this-group:hover, .update-group-cancel-button:hover, #delete-account:hover, #delete-all-groups-button:hover {
+  background-color: #fa7075 !important;
+}
 
-  .edit-this-group {
-    background-color: #fcfc03 !important;
-    color: #383838 !important;
-  }
+.delete-this-group:hover, .update-group-cancel-button:hover, #delete-account:hover {
+  background-color: #fa7075 !important;
+}
 
-  .edit-this-group:hover {
-    background-color: #ffffa3 !important;
-  }
+.edit-this-group,.update-group-save-button, #new-group-clear-button, #logout-all {
+  background-color: #fcfc03 !important;
+  color: #383838 !important;
+}
 
-  .refresh-key {
-    background-color: #03fc20 !important;
-    color: #383838 !important;
-  }
+.edit-this-group:hover, .update-group-save-button:hover, #new-group-clear-button:hover, #logout-all:hover {
+  background-color: #ffffa3 !important;
+}
 
-  .refresh-key:hover {
+.refresh-key, .update-group-clone-button, #new-group-save-button, #update-user-save-button {
+  background-color: #03fc20 !important;
+  color: #383838 !important;
+}
+
+.refresh-key:hover, .update-group-clone-button:hover, #new-group-save-button:hover, #update-user-save-button:hover {
     background-color: #9cffa7 !important;
-  }
+}
 
+.group-info-label {
+  font-weight: bold;
+}
+
+.group-h2 {
+  text-align: center;
+}
+.glance-client-link {
+  padding-top: 10px;
+}
