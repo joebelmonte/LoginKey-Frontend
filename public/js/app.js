@@ -49,6 +49,7 @@ const generateUpdateGroupHTML = function({_id}) {
             <button class="update-group-cancel-button" id="update-group-cancel-button-${_id}">Cancel</button>
             <button class="update-group-save-button" id="update-group-save-button-${_id}">Save</button> 
             <button class="update-group-clone-button" id="update-group-clone-button-${_id}">Clone</button> 
+            <button class="update-group-check-key-button" id="update-group-check-key-button-${_id}">Check Key</button> 
         </div>
         </form>
     `
@@ -235,6 +236,29 @@ var cloneGroupSave = async function(groupid) {
     }
 }
 
+var apiKeyCheck = async function(groupid) {
+    var payload = {
+        apiKey: window.prompt('Enter API Key:')
+    }
+
+    console.log('payload is ', payload)
+    if (!payload.apiKey) {
+        return console.log('No API Key entered.')
+    }
+    try {
+        var checkResult = await superagent.post(`${apiBaseURL}/groups/apikey/confirm/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        console.log('checkResult is ', checkResult)
+        if (checkResult.body.match){
+            alert('API Key matches!')
+        }
+        if(!checkResult.body.match){
+            alert('API Key does not match.')
+        }
+    } catch(e) {
+        alert(e)
+    }
+}
+
 const editGroup = function(group) {
     // TODO: Hide the Groups Div
     // TODO: Show the Edit group div
@@ -283,6 +307,17 @@ const editGroup = function(group) {
                 cloneGroupSave(group._id)
                 // TODO: Hide update div
                 // TODO: Show Groups Div
+            },
+            false
+          );
+    document.getElementById(`update-group-check-key-button-${group._id}`)
+        .addEventListener(
+            "click",
+            e => {
+                e.preventDefault()
+                console.log('update-group-check-key-button ', group._id);
+                // TO Check key
+                apiKeyCheck(group._id)
             },
             false
           );

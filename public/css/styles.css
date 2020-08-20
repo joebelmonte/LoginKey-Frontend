@@ -174,3 +174,7 @@ input {
 .glance-client-link {
   padding-top: 10px;
 }
+
+.update-group-check-key-button {
+  background-color: #e056fd !important;
+}
