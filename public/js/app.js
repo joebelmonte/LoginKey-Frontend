@@ -18,7 +18,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
     <div class="group" id="group-${_id}">
             <h2 class="group-h2">${name}</h2>
             <p><span class="group-info-label">Partner ID</span>: ${partnerId}</p>
-            <p><span class="group-info-label">Partner User ID</span>: ${partnerUserId}</p>
+            <p><span class="group-info-label">Partner User ID</span>: <span class="group-puid">${partnerUserId}<span></p>
             <p><span class="group-info-label">Timeout</span>: <span id="group-info-timeout-${_id}">${timeout}</span></p>
             <p><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code></p>
             <p><span class="group-info-label">Expires</span>: <span id="group-info-expires-${_id}">${expiration}</span></p>
@@ -55,17 +55,37 @@ const generateUpdateGroupHTML = function({_id}) {
     `
 }
 
+// Utilities
+
+const $ = function(element) {
+   return document.getElementById(element)
+}
+
+const hide = function(element){
+    document.getElementById(element).style.display = "none"
+}
+
+const show = function(element){
+    document.getElementById(element).style.display = "block"
+}
+
+
+const showFlex = function(element){
+    document.getElementById(element).style.display = "flex"
+}
+
+
 // Create a group
 
 const createGroup = async function(e) {
     e.preventDefault()
     console.log("In create group")
     var payload = {
-        name: document.getElementById("new-group-name").value,
-        partnerId: document.getElementById("new-group-partnerID").value,
-        apiKey: document.getElementById("new-group-ApiKey").value,
-        partnerUserId: document.getElementById("new-group-PUID").value,
-        timeout: document.getElementById("new-group-timeout").value
+        name: $("new-group-name").value,
+        partnerId: $("new-group-partnerID").value,
+        apiKey: $("new-group-ApiKey").value,
+        partnerUserId: $("new-group-PUID").value,
+        timeout: $("new-group-timeout").value
     }
     if (!payload.name || !payload.partnerId || !payload.apiKey || !payload.partnerUserId) {
         return alert('All fields required other than timeout.')
@@ -77,12 +97,13 @@ const createGroup = async function(e) {
     try {
         const newGroup = await superagent.post(`${apiBaseURL}/groups`).send(payload).set('Authorization', 'Bearer ' + jwt)
         console.log('NewGroup is ', newGroup)
-        document.getElementById("new-group-name").value = ""
-        document.getElementById("new-group-partnerID").value = ""
-        document.getElementById("new-group-ApiKey").value = ""
-        document.getElementById("new-group-PUID").value = ""
-        document.getElementById("new-group-timeout").value = ""
+        $("new-group-name").value = ""
+        $("new-group-partnerID").value = ""
+        $("new-group-ApiKey").value = ""
+        $("new-group-PUID").value = ""
+        $("new-group-timeout").value = ""
         alert('Group created!')
+        hide("new-group")
         getGroups()
     } catch(e) {
         alert(e)
@@ -91,11 +112,11 @@ const createGroup = async function(e) {
 
 const createGroupClear = function(e) {
     e.preventDefault()
-    document.getElementById("new-group-name").value = ""
-    document.getElementById("new-group-partnerID").value = ""
-    document.getElementById("new-group-ApiKey").value = ""
-    document.getElementById("new-group-PUID").value = ""
-    document.getElementById("new-group-timeout").value = ""
+    $("new-group-name").value = ""
+    $("new-group-partnerID").value = ""
+    $("new-group-ApiKey").value = ""
+    $("new-group-PUID").value = ""
+    $("new-group-timeout").value = ""
 }
 
 
@@ -118,61 +139,64 @@ function sortGroups (a, b) {
 // GET Groups
 
 const getGroups = async function() {
-    const groups = await superagent.get(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
-    console.log('groups is ', groups)
-    // if 0 groups, show new group div
-    if (groups.body.length === 0) {
-        // show new group div
-        // TODO
+    try {
+        const groups = await superagent.get(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
+        console.log('groups is ', groups)
+        // if 0 groups, show new group div
+        if (groups.body.length === 0) {
+            // show new group div
+            alert('You have no groups. Try creating one!')
+            show("new-group")
+        }
+        // if >0 groups, show groups div
+        if (groups.body.length > 0) {
+            show('searchContainer')
+            // show groups div
+            showFlex("groups")
+            // Sort groups array alphabetical by group name
+            groups.body.sort(sortGroups)
+            // Clear out HTML of groups div
+            $("groups").innerHTML=''
+            // Generate html for each group and add to groups div
+            groups.body.forEach(group => {
+                var groupHTML = generateGroupHTML(group)
+                $("groups").insertAdjacentHTML("beforeend", groupHTML);
+            // Add event listeners
+                $(`delete-${group._id}`)
+                    .addEventListener(
+                        "click",
+                        e => {
+                        console.log('delete button clicked for ', group._id);
+                        deleteGroup(group._id)
+                        },
+                        false
+                    );
+                $(`edit-${group._id}`)
+                    .addEventListener(
+                        "click",
+                        e => {
+                            console.log('edit button clicked for ', group._id);
+                            editGroup(group)
+                        },
+                        false
+                    );
+                $(`refresh-${group._id}`)
+                    .addEventListener(
+                        "click",
+                        e => {
+                            console.log('refesh button clicked for ', group._id);
+                            refreshGroup(group)
+                        },
+                        false
+                    );
+            
+            });
+        }
+
+    } catch(e) {
+        alert(e)
     }
-    // if >0 groups, show groups div
-    if (groups.body.length > 0) {
-        // TODO: show groups div
-        // Sort groups array alphabetical by group name
-        groups.body.sort(sortGroups)
-        // Clear out HTML of groups div
-        document.getElementById("groups").innerHTML=''
-        // Generate html for each group and add to groups div
-        groups.body.forEach(group => {
-            var groupHTML = generateGroupHTML(group)
-            document
-                .getElementById("groups")
-                .insertAdjacentHTML("beforeend", groupHTML);
-        // Add event listeners
-            document
-                .getElementById(`delete-${group._id}`)
-                .addEventListener(
-                    "click",
-                    e => {
-                      console.log('delete button clicked for ', group._id);
-                      deleteGroup(group._id)
-                    },
-                    false
-                );
-            document
-                .getElementById(`edit-${group._id}`)
-                .addEventListener(
-                    "click",
-                    e => {
-                        console.log('edit button clicked for ', group._id);
-                        editGroup(group)
-                    },
-                    false
-                );
-            // TODO: Hook up event listener functions
-            document
-                .getElementById(`refresh-${group._id}`)
-                .addEventListener(
-                    "click",
-                    e => {
-                        console.log('refesh button clicked for ', group._id);
-                        refreshGroup(group)
-                    },
-                    false
-                );
-          
-        });
-    }
+    
 }
 
 // Delete Group
@@ -181,7 +205,7 @@ const deleteGroup = async function(groupId) {
     if (confirm("Delete group? This cannot be undone.")){
         try {
             await superagent.delete(`${apiBaseURL}/groups/${groupId}`).set('Authorization', 'Bearer ' + jwt)
-            document.getElementById(`group-${groupId}`).remove()
+            $(`group-${groupId}`).remove()
             alert('Group deleted.')
         } catch(e) {
             alert(e)
@@ -193,11 +217,11 @@ const deleteGroup = async function(groupId) {
 
 var getUpdatePayload = function() {
     var payload = {
-        name: document.getElementById("update-group-name").value,
-        partnerId: document.getElementById("update-group-partnerID").value,
-        apiKey: document.getElementById("update-group-ApiKey").value,
-        partnerUserId: document.getElementById("update-group-PUID").value,
-        timeout: document.getElementById("update-group-timeout").value
+        name: $("update-group-name").value,
+        partnerId: $("update-group-partnerID").value,
+        apiKey: $("update-group-ApiKey").value,
+        partnerUserId: $("update-group-PUID").value,
+        timeout: $("update-group-timeout").value
     }
     Object.keys(payload).forEach((key) => (payload[key] == "") && delete payload[key]);
     return payload
@@ -214,7 +238,7 @@ var editGroupSave = async function(groupid) {
     try {
         const updatedGroup = await superagent.patch(`${apiBaseURL}/groups/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
         console.log('Updated group is ', updatedGroup)
-        document.getElementById(`update-group-${groupid}`).remove()
+        $(`update-group-${groupid}`).remove()
         getGroups()
     } catch(e){
         alert(e)
@@ -229,7 +253,11 @@ var cloneGroupSave = async function(groupid) {
     try {
         const clonedGroup = await superagent.post(`${apiBaseURL}/groups/clone/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
         console.log('Cloned group is ', clonedGroup)
-        document.getElementById(`update-group-${groupid}`).remove()
+        $(`update-group-${groupid}`).remove()
+        // Hide update div
+        hide("update-group")
+        // Show Groups Div
+        showFlex("groups")
         getGroups()
     } catch(e){
         alert(e)
@@ -260,57 +288,62 @@ var apiKeyCheck = async function(groupid) {
 }
 
 const editGroup = function(group) {
-    // TODO: Hide the Groups Div
-    // TODO: Show the Edit group div
+    // Hide the Groups Div
+    hide("groups")
+    hide("searchContainer")
+    // Show the Edit group div
+    show("update-group")
     var updateGroupHTML = generateUpdateGroupHTML(group)
-    document.getElementById("update-group").innerHTML = ""
+    $("update-group").innerHTML = ""
     document
     .getElementById("update-group")
     .insertAdjacentHTML("beforeend", updateGroupHTML)
-    // TODO: Update values of input fields
+    // Update values of input fields
     console.log('in editGroup and group is ', group)
-    document.getElementById("update-group-name").value = group.name
-    document.getElementById("update-group-partnerID").value = group.partnerId
-    document.getElementById("update-group-PUID").value = group.partnerUserId
-    document.getElementById("update-group-timeout").value = group.timeout
-    // TODO: Add event listeners
-    document.getElementById(`update-group-cancel-button-${group._id}`)
+    $("update-group-name").value = group.name
+    $("update-group-partnerID").value = group.partnerId
+    $("update-group-PUID").value = group.partnerUserId
+    $("update-group-timeout").value = group.timeout
+    // Add event listeners
+    $(`update-group-cancel-button-${group._id}`)
         .addEventListener(
             "click",
             e => {
                 e.preventDefault()
                 console.log('cancel edit button clicked for ', group._id);
-                document.getElementById(`update-group-${group._id}`).remove()
-                // TODO: Hide update div
-                // TODO: Show Groups Div
+                $(`update-group-${group._id}`).remove()
+                // Hide update div
+                hide("update-group")
+                // Show Groups Div
+                showFlex("groups")
             },
             false
           );
-    document.getElementById(`update-group-save-button-${group._id}`)
+    $(`update-group-save-button-${group._id}`)
         .addEventListener(
             "click",
             e => {
                 e.preventDefault()
                 console.log('save edit button clicked for ', group._id);
                 editGroupSave(group._id)
-                // TODO: Hide update div
-                // TODO: Show Groups Div
+                // Hide update div
+                hide("update-group")
+                // Show Groups Div
+                showFlex("groups")
             },
             false
           );
-    document.getElementById(`update-group-clone-button-${group._id}`)
+    $(`update-group-clone-button-${group._id}`)
         .addEventListener(
             "click",
             e => {
                 e.preventDefault()
                 console.log('clone button clicked for ', group._id);
                 cloneGroupSave(group._id)
-                // TODO: Hide update div
-                // TODO: Show Groups Div
             },
             false
           );
-    document.getElementById(`update-group-check-key-button-${group._id}`)
+    $(`update-group-check-key-button-${group._id}`)
         .addEventListener(
             "click",
             e => {
@@ -326,7 +359,7 @@ const editGroup = function(group) {
 // Refresh Group
 
 var refreshGroup = async function(group){
-    if (parseInt(document.getElementById(`group-info-timeout-${group._id}`).innerHTML) > 86400){
+    if (parseInt($(`group-info-timeout-${group._id}`).innerHTML) > 86400){
         return alert('Timeout is specified in absolute time. Nothing to refresh.')
     }
     console.log('in refreshGroup. Need to put stuff here')
@@ -335,8 +368,8 @@ var refreshGroup = async function(group){
         console.log('the refreshedGroup.body is ', refreshedGroup.body)
         var refreshedExpiration = new Date(parseInt(refreshedGroup.body.loginKey.split("$")[2])*1000).toString()
     
-        document.getElementById(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
-        document.getElementById(`group-info-expires-${group._id}`).innerHTML = refreshedExpiration
+        $(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
+        $(`group-info-expires-${group._id}`).innerHTML = refreshedExpiration
     } catch(e) {
         alert(e)
     }
@@ -346,9 +379,9 @@ var refreshGroup = async function(group){
 
 var signUp = async (e) => {
     e.preventDefault()
-    const email = document.getElementById("sign-up-email").value
-    const password = document.getElementById("sign-up-password").value
-    const confirmPassword = document.getElementById("confirm-password").value
+    const email = $("sign-up-email").value
+    const password = $("sign-up-password").value
+    const confirmPassword = $("confirm-password").value
     if (!email || !password || !confirmPassword) {
         return alert('All fields required.')
     }
@@ -369,15 +402,12 @@ var signUp = async (e) => {
         jwt = response.body.token
         console.log('jwt is ', jwt)
         // clear sign up fields
-        document.getElementById("sign-up-email").value = ""
-        document.getElementById("sign-up-password").value = ""
-        document.getElementById("confirm-password").value = ""
-        // hide sign up div
-        // TODO
-        // show the enter new group div
-        // TODO
-        // show the menu bar
-        // TODO
+        $("sign-up-email").value = ""
+        $("sign-up-password").value = ""
+        $("confirm-password").value = ""
+        hide("sign-up")
+        show('nav-bar')
+        getGroups()
     } catch(e){
         alert(e)
     }
@@ -387,13 +417,13 @@ var signUpCancel = (e) => {
     e.preventDefault()
     console.log('Cancel the sign up')
     // clear sign up fields
-    document.getElementById("sign-up-email").value = ""
-    document.getElementById("sign-up-password").value = ""
-    document.getElementById("confirm-password").value = ""
+    $("sign-up-email").value = ""
+    $("sign-up-password").value = ""
+    $("confirm-password").value = ""
     // hide sign up div
-    // TODO
+    hide("sign-up")
     // show sign in div
-    // TODO
+    show("sign-in")
 }
 
 // Sign In
@@ -402,8 +432,8 @@ var signIn = async (e) => {
     e.preventDefault()
     console.log('Sign in')
     // Sign in and get auth token
-    const email = document.getElementById("sign-in-email").value
-    const password = document.getElementById("sign-in-password").value
+    const email = $("sign-in-email").value
+    const password = $("sign-in-password").value
     if (!email || !password) {
         return alert('All fields required.')
     }
@@ -421,9 +451,11 @@ var signIn = async (e) => {
         jwt = response.body.token
         console.log('jwt is ', jwt)
         // clear sign in fields
-        document.getElementById("sign-in-email").value = ""
-        document.getElementById("sign-in-password").value = ""
-        // TODO: hide sign in div
+        $("sign-in-email").value = ""
+        $("sign-in-password").value = ""
+        // hide sign in div
+        hide("sign-in")
+        show("nav-bar")
         // request groups
         getGroups()
     } catch(e){
@@ -435,20 +467,20 @@ var clearSignIn = (e) => {
     e.preventDefault()
     console.log('Clear sign in')
     // clear sign in fields
-    document.getElementById("sign-in-email").value = ""
-    document.getElementById("sign-in-password").value = ""
+    $("sign-in-email").value = ""
+    $("sign-in-password").value = ""
 }
 
 var createAccount = (e) => {
     e.preventDefault()
     console.log('createAccount')
     // clear sign in fields
-    document.getElementById("sign-in-email").value = ""
-    document.getElementById("sign-in-password").value = ""
+    $("sign-in-email").value = ""
+    $("sign-in-password").value = ""
     // Hide sign in div
-    // TODO
+    hide("sign-in")
     // Show create account div
-    // TODO 
+    show("sign-up")
 }
 
 // User Profile Actions
@@ -461,9 +493,11 @@ const deleteAccount = async function(e) {
     try {
         await superagent.delete(`${apiBaseURL}/users/me`).set('Authorization', 'Bearer ' + jwt)
         alert('Account deleted.')
-        document.getElementById("groups").innerHTML=''
-        // TODO: Hide profile
-        // TODO: Show sign in page
+        $("groups").innerHTML=''
+        hideAll()
+        hide("nav-bar")
+        jwt = ''
+        show("sign-in")
     } catch(e){
         alert(e)
     }
@@ -477,7 +511,7 @@ const deleteAllGroups = async function(e) {
     try {
         await superagent.delete(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
         alert('All groups deleted.')
-        document.getElementById("groups").innerHTML = ''
+        $("groups").innerHTML = ''
     } catch(e) {
         alert(e)
     }
@@ -489,11 +523,13 @@ const logoutAll = async function(e) {
         await superagent.post(`${apiBaseURL}/users/logoutAll`).set('Authorization', 'Bearer ' + jwt)
         alert('You have been logged out of all devices.')
         // clear update user fields
-        document.getElementById("update-username").value = ""
-        document.getElementById("update-password").value = ""
-        document.getElementById("update-password-confirm").value = ""
-        // TODO: Hide this div
-        // TODO: Show the sign in div
+        $("update-username").value = ""
+        $("update-password").value = ""
+        $("update-password-confirm").value = ""
+        hideAll()
+        hide("nav-bar")
+        jwt = ''
+        show("sign-in")
     } catch(e){
         alert(e)
     }
@@ -502,9 +538,9 @@ const logoutAll = async function(e) {
 const updateUserSave = async function(e){
     e.preventDefault()
     var payload = {}
-    const email = document.getElementById("update-username").value
-    const password = document.getElementById("update-password").value
-    const confirmPassword = document.getElementById("update-password-confirm").value
+    const email = $("update-username").value
+    const password = $("update-password").value
+    const confirmPassword = $("update-password-confirm").value
     if (email) {
         payload.email = email
     }
@@ -524,9 +560,9 @@ const updateUserSave = async function(e){
         console.log('it worked and the updatedUser is ', updatedUser)
  
         // clear update user fields
-        document.getElementById("update-username").value = ""
-        document.getElementById("update-password").value = ""
-        document.getElementById("update-password-confirm").value = ""
+        $("update-username").value = ""
+        $("update-password").value = ""
+        $("update-password-confirm").value = ""
         alert('Account updated.')
     } catch(e){
         alert(e)
@@ -535,32 +571,100 @@ const updateUserSave = async function(e){
 
 const updateUserCancel = function(e){
     e.preventDefault()
-    document.getElementById("update-username").value = ""
-    document.getElementById("update-password").value = ""
-    document.getElementById("update-password-confirm").value = ""
+    $("update-username").value = ""
+    $("update-password").value = ""
+    $("update-password-confirm").value = ""
 }
 
 
 // Event Listeners
 
 // Sign Up 
-document.getElementById("sign-up-button").addEventListener("click",signUp)
-document.getElementById("cancel-sign-up").addEventListener("click",signUpCancel)
+$("sign-up-button").addEventListener("click",signUp)
+$("cancel-sign-up").addEventListener("click",signUpCancel)
 
 // Sign In
-document.getElementById("sign-in-button").addEventListener("click",signIn)
-document.getElementById("clear-sign-in").addEventListener("click",clearSignIn)
-document.getElementById("create-account").addEventListener("click",createAccount)
+$("sign-in-button").addEventListener("click",signIn)
+$("clear-sign-in").addEventListener("click",clearSignIn)
+$("create-account").addEventListener("click",createAccount)
 
 // if cancel clicked, clear fields, hide this element, and show sign in
 
 // Create group
-document.getElementById("new-group-save-button").addEventListener("click",createGroup)
-document.getElementById("new-group-clear-button").addEventListener("click",createGroupClear)
+$("new-group-save-button").addEventListener("click",createGroup)
+$("new-group-clear-button").addEventListener("click",createGroupClear)
 
 // User Profile
-document.getElementById("delete-account").addEventListener("click",deleteAccount)
-document.getElementById("delete-all-groups-button").addEventListener("click",deleteAllGroups)
-document.getElementById("logout-all").addEventListener("click",logoutAll)
-document.getElementById("update-user-save-button").addEventListener("click",updateUserSave)
-document.getElementById("update-user-cancel-button").addEventListener("click",updateUserCancel)
+$("delete-account").addEventListener("click",deleteAccount)
+$("delete-all-groups-button").addEventListener("click",deleteAllGroups)
+$("logout-all").addEventListener("click",logoutAll)
+$("update-user-save-button").addEventListener("click",updateUserSave)
+$("update-user-cancel-button").addEventListener("click",updateUserCancel)
+
+// Nav Bar Events
+
+const hideAll = function(){
+    hide("new-group")
+    hide("update-group")
+    hide("user-profile")
+    hide('groups')
+    hide('searchContainer')
+}
+
+const showGroups = function() {
+    console.log('in showGroups')
+    hideAll()
+    getGroups()
+
+}
+
+const showNewGroup = function() {
+    console.log('in showNewGroup')
+    hideAll()
+    show("new-group")
+}
+
+const showProfile = function() {
+    console.log('in showProfile')
+    hideAll()
+    show("user-profile")
+}
+
+const logOut = async function() {
+    console.log('in LogOut')
+    hideAll()
+    hide("nav-bar")
+    try {
+        const clonedGroup = await superagent.post(`${apiBaseURL}/users/logout`).set('Authorization', 'Bearer ' + jwt)
+    } catch(e) {
+        console.log('Problem logging out: ', e)
+    }
+    jwt = ''
+    show("sign-in")
+}
+
+$("show-groups").addEventListener("click",showGroups)
+$("show-new-group").addEventListener("click",showNewGroup)
+$("show-profile").addEventListener("click",showProfile)
+$("show-log-out").addEventListener("click",logOut)
+
+// The Filtering
+
+const filter = function() {
+    console.log("I'm filtering")
+    var filterTerm = document.getElementById("searchBox").value.toUpperCase()
+    var cardNames = document.getElementsByClassName("group-h2")
+    var cards = document.getElementsByClassName("group")
+    for (i = 0; i < cards.length; i++) {
+        a = cardNames[i].textContent.toUpperCase()
+        if (a.indexOf(filterTerm) > -1) {
+            console.log('display block and a is ', a)
+            console.log('cards[i] is ', cards[i])
+            cards[i].style.display = "block"
+        } else {
+            console.log('display none and a is ', a)
+            cards[i].style.display = "none"
+            console.log('cards[i] is ', cards[i])
+        }
+    }
+}

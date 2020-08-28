@@ -28,6 +28,10 @@ h1 {
     margin-bottom: 25px;
 }
 
+#header {
+  padding-bottom: 20px;
+}
+
 #nav-bar {
     text-align: center;
 }
@@ -177,4 +181,17 @@ input {
 
 .update-group-check-key-button {
   background-color: #e056fd !important;
+}
+
+.update-group-check-key-button:hover {
+  background-color: #ea8bfd !important;
+}
+
+#nav-bar, #sign-up, #new-group, #update-group, #user-profile, #groups {
+  display: none;
+}
+
+#searchContainer {
+  text-align: center;
+  display: none;
 }

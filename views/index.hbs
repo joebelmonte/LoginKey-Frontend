@@ -14,8 +14,10 @@
             <a href="#" id="show-groups">Groups</a>
             <a href="#" id="show-new-group">New Group</a>
             <a href="#" id="show-profile">Profile</a>
+            <a href="#" id="about">About</a>
             <a href="#" id="show-log-out">Log Out</a>
         </p>
+        <div id="searchContainer"><input type="text" id="searchBox" onkeyup="filter()" placeholder="Filter by card name..." title="Type in a search term"></div>
     </div>
 
     <div id="sign-up">
@@ -59,16 +61,16 @@
     <div id="update-group">
     </div>
     <div id="user-profile">
-        <h2>User Profile</h2>
+        <h2>Update Profile</h2>
         <form>
-            <input type="text" id="update-username" name="update-username" placeholder="Username" autocomplete="username"><br>
+            <input type="text" id="update-username" name="update-username" placeholder="Update email" autocomplete="username"><br>
             <input type="password" id="update-password" name="update-password" placeholder="Password" autocomplete="new-password"><br>
             <input type="password" id="update-password-confirm" name="update-password-confirm" placeholder="Confirm Password" autocomplete="new-password"><br>
         <div class="btn-group">
             <button id="delete-account">Delete Account</button>
             <button id="delete-all-groups-button">Delete All Groups</button> 
             <button id="logout-all">Logout From All Devices</button> 
-            <button id="update-user-save-button">Update UN/PW</button><br><br>
+            <button id="update-user-save-button">Update Emaildelete/PW</button><br><br>
             <button id="update-user-cancel-button">Clear Fields</button>
         </div>
         </form>
