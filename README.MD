@@ -47,7 +47,7 @@ You can create a new card in the future by clicking "New Card" from the navigati
 
 Once at least 1 card has been created, you will be able to view the your cards.  
 
-![ScreenShot](/screenshots/new_card.png)
+![ScreenShot](/screenshots/cards.png)
 
 The following actions are available for each card:
 
@@ -57,7 +57,26 @@ The following actions are available for each card:
 
 ## Edit Card
 
+Edit Card brings up the following view:
 
+![ScreenShot](/screenshots/edit_card.png)
+
+The following actions are available:
+
+- **Cancel:** Will return to the Cards view.
+- **Save:** This will update the card with any changes that have been made to the form above.
+- **Clone:** This will create a new card and does not modify the card being edited.  The new card has the same attributes as the card being edited, however if the user has made changes to the values in the form then those new values will be used instead.
+- **Check Key:** For security reasons, the API Key is never returned from the API.  However, you can use this function to check whether the API Key you are using is the one currently associated with this card in the database.  Click *Check Key* and enter your API Key.  The app will tell you whether or not it is a match with the API Key in the database.  
 
 ## Profile
 
+Profile brings up the following view:
+
+![ScreenShot](/screenshots/profile.png)
+
+The following actions are available:
+
+- **Delete Account:** This will permanently delete the user account and log the user out.
+- **Delete All Cards:** This will permanently delete all cards associated with the account.
+- **Logout From All Devices:** This will delete all of the authentication tokens associated with the account, logging the user out of all devices.
+- **Update Email/PW:** This will update the account with the email and/or password specified in the form.
