@@ -107,7 +107,7 @@ const createGroup = async function(e) {
         $("new-group-ApiKey").value = ""
         $("new-group-PUID").value = ""
         $("new-group-timeout").value = ""
-        alert('Group created!')
+        alert('Card created!')
         hide("new-group")
         getGroups()
     } catch(e) {
@@ -150,7 +150,7 @@ const getGroups = async function() {
         // if 0 groups, show new group div
         if (groups.body.length === 0) {
             // show new group div
-            alert('You have no groups. Try creating one!')
+            alert('You have no cards. Try creating one!')
             show("new-group")
         }
         // if >0 groups, show groups div
@@ -207,11 +207,11 @@ const getGroups = async function() {
 // Delete Group
 
 const deleteGroup = async function(groupId) {
-    if (confirm("Delete group? This cannot be undone.")){
+    if (confirm("Delete card? This cannot be undone.")){
         try {
             await superagent.delete(`${apiBaseURL}/groups/${groupId}`).set('Authorization', 'Bearer ' + jwt)
             $(`group-${groupId}`).remove()
-            alert('Group deleted.')
+            alert('Card deleted.')
         } catch(e) {
             alert(e)
         }
@@ -252,7 +252,7 @@ var editGroupSave = async function(groupid) {
 
 var cloneGroupSave = async function(groupid) {
     var payload = getUpdatePayload()
-    if(!window.confirm('Clone group with changes?')){
+    if(!window.confirm('Clone card with changes?')){
         return
     }
     try {
@@ -510,12 +510,12 @@ const deleteAccount = async function(e) {
 
 const deleteAllGroups = async function(e) {
     e.preventDefault()
-    if(!confirm("Delete ALL groups associated with this account? This cannot be undone.")) {
+    if(!confirm("Delete ALL cards associated with this account? This cannot be undone.")) {
         return
     }
     try {
         await superagent.delete(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
-        alert('All groups deleted.')
+        alert('All cards deleted.')
         $("groups").innerHTML = ''
     } catch(e) {
         alert(e)
