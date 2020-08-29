@@ -27,8 +27,8 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
                 <div class="glance-client-link"><a href="${glanceClient}" >Glance Client</a></div>
             </div>
             <div class="btn-group">
-                <button class="delete-this-group" id="delete-${_id}">Delete Group</button> 
-                <button class="edit-this-group" id="edit-${_id}">Edit Group</button> 
+                <button class="delete-this-group" id="delete-${_id}">Delete Card</button> 
+                <button class="edit-this-group" id="edit-${_id}">Edit Card</button> 
                 <button class="refresh-key" id="refresh-${_id}">Refresh Key</button> 
             </div>
         </div>
@@ -40,10 +40,15 @@ const generateUpdateGroupHTML = function({_id}) {
         <div id="update-group-${_id}">
         <h2>Edit Group</h2>
         <form>
+            <p class="edit-group-label">Group Name:</p>
             <input type="text" id="update-group-name" name="update-group-name" placeholder="Group name"><br>
+            <p class="edit-group-label">Partner ID:</p>
             <input type="number" id="update-group-partnerID" name="update-group-partnerID" placeholder="Partner ID"><br>
+            <p class="edit-group-label">API Key:</p>
             <input type="password" id="update-group-ApiKey" name="update-group-ApiKey" placeholder="API Key" autocomplete="none"><br>
+            <p class="edit-group-label">Partner User ID:</p>
             <input type="text" id="update-group-PUID" name="update-group-PUID" placeholder="Partner User ID"><br>
+            <p class="edit-group-label">Timeout:</p>
             <input type="number" id="update-group-timeout" name="update-group-timeout" placeholder="Timeout in seconds from now or absolute time (UTC)"><br>
         <div class="btn-group">
             <button class="update-group-cancel-button" id="update-group-cancel-button-${_id}">Cancel</button>

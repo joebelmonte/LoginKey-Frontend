@@ -195,3 +195,13 @@ input {
   text-align: center;
   display: none;
 }
+
+#sign-in-about, #sign-up-about {
+  margin-top: 15px;
+}
+
+.edit-group-label, .new-group-label {
+  display: inline-block;
+  text-align: right !important;
+  width: 140px;
+}
