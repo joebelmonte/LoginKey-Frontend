@@ -4,6 +4,14 @@ LoginKey Front End
 
 # Table of contents
 
+- [About](#about)
+- [Glossary of Terms](#glossary-of-terms)
+- [Using the App](#using-the-app)
+  - [Creating a Card](#creating-a-card)
+  - [Viewing Cards](#viewing-cards)
+  - [Edit Card](#edit-card)
+  - [Profile](#profile)
+
 # About
 
 The *LoginKey Generator* web app is a front-end application built to connect to the back end server found [here](https://github.com/joebelmonte/LoginKey-Backend).
