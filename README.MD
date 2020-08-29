@@ -43,6 +43,21 @@ Enter the appropriate values and click "Save".
 
 You can create a new card in the future by clicking "New Card" from the navigation menu.
 
-## Card View
+## Viewing Cards
 
 Once at least 1 card has been created, you will be able to view the your cards.  
+
+![ScreenShot](/screenshots/new_card.png)
+
+The following actions are available for each card:
+
+- **Delete Card:** This will permanently delete the card.
+- **Edit Card:** This takes you to the Edit Card view (see below).
+- **Refresh Key:** This will refresh the login key if the timeout is specified in relative time.  If the timeout is specified in absolute time, the app will display a warning message and perform no function.
+
+## Edit Card
+
+
+
+## Profile
+
