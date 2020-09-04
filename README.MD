@@ -24,7 +24,11 @@ The *LoginKey Generator* web app is a front-end application built to connect to 
 - Partner User ID
 - Timeout
 
-This information is then stored in a database and used to generate LoginKeys, which in turn can be used to authenticate to various services at [Glance Networks](https://ww2.glance.net).  For more information on login keys and how they relate to Glance, see [here](https://help.glance.net/integrations/login-key/). 
+This information is then stored in a database and used to generate login keys, which in turn can be used to authenticate to various services at [Glance Networks](https://ww2.glance.net).  
+
+At least 1 account with Glance is required to use this app.
+
+For more information on login keys and how they relate to Glance, see [here](https://help.glance.net/integrations/login-key/). 
 
 # Glossary of Terms
 
@@ -62,6 +66,8 @@ The following actions are available for each card:
 - **Delete Card:** This will permanently delete the card.
 - **Edit Card:** This takes you to the Edit Card view (see below).
 - **Refresh Key:** This will refresh the login key if the timeout is specified in relative time.  If the timeout is specified in absolute time, the app will display a warning message and perform no function.
+
+You can also filter by Card Name using the search box below the navigation menu.
 
 ## Edit Card
 

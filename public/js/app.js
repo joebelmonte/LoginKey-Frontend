@@ -3,7 +3,7 @@ console.log('app.js is loaded')
 // Config
 
 var jwt = ""
-var apiBaseURL = ""
+var apiBaseURL = "https://loginkey-api.herokuapp.com"
 
 if (window.location.hostname === "localhost") {
     apiBaseURL = "http://localhost:3000"
@@ -84,7 +84,6 @@ const showFlex = function(element){
 
 const createGroup = async function(e) {
     e.preventDefault()
-    console.log("In create group")
     var payload = {
         name: $("new-group-name").value,
         partnerId: $("new-group-partnerID").value,
@@ -98,10 +97,8 @@ const createGroup = async function(e) {
     if (payload.timeout === "") {
         delete payload.timeout
     }
-    console.log('Payload is ', payload)
     try {
         const newGroup = await superagent.post(`${apiBaseURL}/groups`).send(payload).set('Authorization', 'Bearer ' + jwt)
-        console.log('NewGroup is ', newGroup)
         $("new-group-name").value = ""
         $("new-group-partnerID").value = ""
         $("new-group-ApiKey").value = ""
@@ -111,7 +108,8 @@ const createGroup = async function(e) {
         hide("new-group")
         getGroups()
     } catch(e) {
-        alert(e)
+        console.log('There was a problem creating the card: ', e)
+        alert(`Problem creating card: ${e}`)
     }
 }
 
@@ -146,7 +144,6 @@ function sortGroups (a, b) {
 const getGroups = async function() {
     try {
         const groups = await superagent.get(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
-        console.log('groups is ', groups)
         // if 0 groups, show new group div
         if (groups.body.length === 0) {
             // show new group div
@@ -171,7 +168,6 @@ const getGroups = async function() {
                     .addEventListener(
                         "click",
                         e => {
-                        console.log('delete button clicked for ', group._id);
                         deleteGroup(group._id)
                         },
                         false
@@ -180,7 +176,6 @@ const getGroups = async function() {
                     .addEventListener(
                         "click",
                         e => {
-                            console.log('edit button clicked for ', group._id);
                             editGroup(group)
                         },
                         false
@@ -189,7 +184,6 @@ const getGroups = async function() {
                     .addEventListener(
                         "click",
                         e => {
-                            console.log('refesh button clicked for ', group._id);
                             refreshGroup(group)
                         },
                         false
@@ -199,7 +193,8 @@ const getGroups = async function() {
         }
 
     } catch(e) {
-        alert(e)
+        console.log('There was a problem retrieving cards: ', e)
+        alert(`Problem retrieving cards: ${e}`)
     }
     
 }
@@ -213,7 +208,8 @@ const deleteGroup = async function(groupId) {
             $(`group-${groupId}`).remove()
             alert('Card deleted.')
         } catch(e) {
-            alert(e)
+            console.log('There was a problem deleting the card: ', e)
+            alert(`Problem deleting card: ${e}`)
         }
     }
 }
@@ -242,11 +238,11 @@ var editGroupSave = async function(groupid) {
     }
     try {
         const updatedGroup = await superagent.patch(`${apiBaseURL}/groups/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
-        console.log('Updated group is ', updatedGroup)
         $(`update-group-${groupid}`).remove()
         getGroups()
     } catch(e){
-        alert(e)
+        console.log('There was a problem saving changes: ', e)
+        alert(`Problem saving changes: ${e}`)
     }
 }
 
@@ -257,7 +253,6 @@ var cloneGroupSave = async function(groupid) {
     }
     try {
         const clonedGroup = await superagent.post(`${apiBaseURL}/groups/clone/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
-        console.log('Cloned group is ', clonedGroup)
         $(`update-group-${groupid}`).remove()
         // Hide update div
         hide("update-group")
@@ -265,7 +260,8 @@ var cloneGroupSave = async function(groupid) {
         showFlex("groups")
         getGroups()
     } catch(e){
-        alert(e)
+        console.log('There was a problem cloning the card: ', e)
+        alert(`Problem cloning the card: ${e}`)
     }
 }
 
@@ -273,14 +269,14 @@ var apiKeyCheck = async function(groupid) {
     var payload = {
         apiKey: window.prompt('Enter API Key:')
     }
-
-    console.log('payload is ', payload)
-    if (!payload.apiKey) {
-        return console.log('No API Key entered.')
+    if (payload.apiKey === "") {
+        return alert('No API Key entered.')
+    }
+    if (payload.apiKey === null) {
+        return
     }
     try {
         var checkResult = await superagent.post(`${apiBaseURL}/groups/apikey/confirm/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
-        console.log('checkResult is ', checkResult)
         if (checkResult.body.match){
             alert('API Key matches!')
         }
@@ -288,7 +284,8 @@ var apiKeyCheck = async function(groupid) {
             alert('API Key does not match.')
         }
     } catch(e) {
-        alert(e)
+        console.log('There was a problem checking the API Key: ', e)
+        alert(`Problem checking the API Key: ${e}`)
     }
 }
 
@@ -304,7 +301,6 @@ const editGroup = function(group) {
     .getElementById("update-group")
     .insertAdjacentHTML("beforeend", updateGroupHTML)
     // Update values of input fields
-    console.log('in editGroup and group is ', group)
     $("update-group-name").value = group.name
     $("update-group-partnerID").value = group.partnerId
     $("update-group-PUID").value = group.partnerUserId
@@ -315,7 +311,6 @@ const editGroup = function(group) {
             "click",
             e => {
                 e.preventDefault()
-                console.log('cancel edit button clicked for ', group._id);
                 $(`update-group-${group._id}`).remove()
                 // Hide update div
                 hide("update-group")
@@ -329,7 +324,6 @@ const editGroup = function(group) {
             "click",
             e => {
                 e.preventDefault()
-                console.log('save edit button clicked for ', group._id);
                 editGroupSave(group._id)
                 // Hide update div
                 hide("update-group")
@@ -343,7 +337,6 @@ const editGroup = function(group) {
             "click",
             e => {
                 e.preventDefault()
-                console.log('clone button clicked for ', group._id);
                 cloneGroupSave(group._id)
             },
             false
@@ -353,7 +346,6 @@ const editGroup = function(group) {
             "click",
             e => {
                 e.preventDefault()
-                console.log('update-group-check-key-button ', group._id);
                 // TO Check key
                 apiKeyCheck(group._id)
             },
@@ -367,16 +359,15 @@ var refreshGroup = async function(group){
     if (parseInt($(`group-info-timeout-${group._id}`).innerHTML) > 86400){
         return alert('Timeout is specified in absolute time. Nothing to refresh.')
     }
-    console.log('in refreshGroup. Need to put stuff here')
     try {
         const refreshedGroup = await superagent.get(`${apiBaseURL}/groups/${group._id}`).set('Authorization', 'Bearer ' + jwt)
-        console.log('the refreshedGroup.body is ', refreshedGroup.body)
         var refreshedExpiration = new Date(parseInt(refreshedGroup.body.loginKey.split("$")[2])*1000).toString()
     
         $(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
         $(`group-info-expires-${group._id}`).innerHTML = refreshedExpiration
     } catch(e) {
-        alert(e)
+        console.log('There was a problem refreshing the key: ', e)
+        alert(`Problem refreshing the key: ${e}`)
     }
 }
 
@@ -402,10 +393,8 @@ var signUp = async (e) => {
     }
     try {
         const response = await superagent.post(`${apiBaseURL}/users`).send(payload)
-        console.log('it worked and the response is ', response)
         // Set the auth token
         jwt = response.body.token
-        console.log('jwt is ', jwt)
         // clear sign up fields
         $("sign-up-email").value = ""
         $("sign-up-password").value = ""
@@ -414,13 +403,13 @@ var signUp = async (e) => {
         show('nav-bar')
         getGroups()
     } catch(e){
-        alert(e)
+        console.log('There was a problem signing up: ', e)
+        alert(`Problem signing up: ${e}`)
     }
 }
 
 var signUpCancel = (e) => {
     e.preventDefault()
-    console.log('Cancel the sign up')
     // clear sign up fields
     $("sign-up-email").value = ""
     $("sign-up-password").value = ""
@@ -435,7 +424,6 @@ var signUpCancel = (e) => {
 
 var signIn = async (e) => {
     e.preventDefault()
-    console.log('Sign in')
     // Sign in and get auth token
     const email = $("sign-in-email").value
     const password = $("sign-in-password").value
@@ -451,10 +439,8 @@ var signIn = async (e) => {
     }
     try {
         const response = await superagent.post(`${apiBaseURL}/users/login`).send(payload)
-        console.log('it worked and the response is ', response)
         // Set the auth token
         jwt = response.body.token
-        console.log('jwt is ', jwt)
         // clear sign in fields
         $("sign-in-email").value = ""
         $("sign-in-password").value = ""
@@ -464,13 +450,13 @@ var signIn = async (e) => {
         // request groups
         getGroups()
     } catch(e){
-        alert(e)
+        alert(`Problem signing in: ${e}`)
+        console.log('Problem signing in: ', e)
     }
 }
 
 var clearSignIn = (e) => {
     e.preventDefault()
-    console.log('Clear sign in')
     // clear sign in fields
     $("sign-in-email").value = ""
     $("sign-in-password").value = ""
@@ -478,7 +464,6 @@ var clearSignIn = (e) => {
 
 var createAccount = (e) => {
     e.preventDefault()
-    console.log('createAccount')
     // clear sign in fields
     $("sign-in-email").value = ""
     $("sign-in-password").value = ""
@@ -504,7 +489,8 @@ const deleteAccount = async function(e) {
         jwt = ''
         show("sign-in")
     } catch(e){
-        alert(e)
+        console.log('There was a problem deleting your account: ', e)
+        alert(`Problem deleting account: ${e}`)
     }
 }
 
@@ -518,7 +504,8 @@ const deleteAllGroups = async function(e) {
         alert('All cards deleted.')
         $("groups").innerHTML = ''
     } catch(e) {
-        alert(e)
+        console.log('Problem deleting all groups: ', e)
+        alert(`Problem deleting groups: ${e}`)
     }
 }
 
@@ -536,7 +523,8 @@ const logoutAll = async function(e) {
         jwt = ''
         show("sign-in")
     } catch(e){
-        alert(e)
+        console.log('There was a problem logging out all: ', e)
+        alert(`Problem logging out all: ${e}`)
     }
 }
 
@@ -558,19 +546,18 @@ const updateUserSave = async function(e){
         }
         payload.password = password
     }
-    console.log('payload is ', payload)
+
 
     try {
         const updatedUser = await superagent.patch(`${apiBaseURL}/users/me`).send(payload).set('Authorization', 'Bearer ' + jwt)
-        console.log('it worked and the updatedUser is ', updatedUser)
- 
         // clear update user fields
         $("update-username").value = ""
         $("update-password").value = ""
         $("update-password-confirm").value = ""
         alert('Account updated.')
     } catch(e){
-        alert(e)
+        console.log('There was a problem updating: ', e)
+        alert(`Problem updating: ${e}`)
     }
 }
 
@@ -617,32 +604,29 @@ const hideAll = function(){
 }
 
 const showGroups = function() {
-    console.log('in showGroups')
     hideAll()
     getGroups()
 
 }
 
 const showNewGroup = function() {
-    console.log('in showNewGroup')
     hideAll()
     show("new-group")
 }
 
 const showProfile = function() {
-    console.log('in showProfile')
     hideAll()
     show("user-profile")
 }
 
 const logOut = async function() {
-    console.log('in LogOut')
     hideAll()
     hide("nav-bar")
     try {
         const clonedGroup = await superagent.post(`${apiBaseURL}/users/logout`).set('Authorization', 'Bearer ' + jwt)
     } catch(e) {
         console.log('Problem logging out: ', e)
+        alert(`Problem logging out: ${e}`)
     }
     jwt = ''
     show("sign-in")
@@ -656,20 +640,15 @@ $("show-log-out").addEventListener("click",logOut)
 // The Filtering
 
 const filter = function() {
-    console.log("I'm filtering")
     var filterTerm = document.getElementById("searchBox").value.toUpperCase()
     var cardNames = document.getElementsByClassName("group-h2")
     var cards = document.getElementsByClassName("group")
     for (i = 0; i < cards.length; i++) {
         a = cardNames[i].textContent.toUpperCase()
         if (a.indexOf(filterTerm) > -1) {
-            console.log('display block and a is ', a)
-            console.log('cards[i] is ', cards[i])
             cards[i].style.display = "block"
         } else {
-            console.log('display none and a is ', a)
             cards[i].style.display = "none"
-            console.log('cards[i] is ', cards[i])
         }
     }
 }
