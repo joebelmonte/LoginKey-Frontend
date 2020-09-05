@@ -5,6 +5,7 @@ LoginKey Front End
 # Table of contents
 
 - [About](#about)
+- [Configuration](#configuration)
 - [Glossary of Terms](#glossary-of-terms)
 - [Using the App](#using-the-app)
   - [Creating a Card](#creating-a-card)
@@ -29,6 +30,18 @@ This information is then stored in a database and used to generate login keys, w
 At least 1 account with Glance is required to use this app.
 
 For more information on login keys and how they relate to Glance, see [here](https://help.glance.net/integrations/login-key/). 
+
+For a deployed example of this app, see [here](https://loginkey-app.herokuapp.com).
+
+# Configuration
+
+The following environment variables must be defined:
+
+| Variable               | Definition                                              |
+|------------------------|---------------------------------------------------------|
+| PORT                   | Port that the server listens on.                        |
+
+
 
 # Glossary of Terms
 

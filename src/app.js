@@ -20,5 +20,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log(`The front end server is up on port 5000.`)
+    console.log(`The front end server is up on port ${port}.`)
 })

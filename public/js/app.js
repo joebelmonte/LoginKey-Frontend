@@ -49,7 +49,7 @@ const generateUpdateGroupHTML = function({_id}) {
             <p class="edit-group-label">Partner User ID:</p>
             <input type="text" id="update-group-PUID" name="update-group-PUID" placeholder="Partner User ID"><br>
             <p class="edit-group-label">Timeout:</p>
-            <input type="number" id="update-group-timeout" name="update-group-timeout" placeholder="Timeout in seconds from now or absolute time (UTC)"><br>
+            <input type="number" id="update-group-timeout" name="update-group-timeout" placeholder="Seconds from now or absolute time (UTC)"><br>
         <div class="btn-group">
             <button class="update-group-cancel-button" id="update-group-cancel-button-${_id}">Cancel</button>
             <button class="update-group-save-button" id="update-group-save-button-${_id}">Save</button> 
