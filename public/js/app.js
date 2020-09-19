@@ -1,5 +1,3 @@
-console.log('app.js is loaded')
-
 // Config
 
 var jwt = ""
