@@ -12,6 +12,7 @@ if (window.location.hostname === "localhost") {
 
 // HTML
 
+
 const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, timeout, agentJoin, glanceClient, _id}) {
     var expiration = new Date(parseInt(loginKey.split("$")[2])*1000).toString()
     return `
@@ -20,7 +21,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
             <p><span class="group-info-label">Partner ID</span>: ${partnerId}</p>
             <p><span class="group-info-label">Partner User ID</span>: <span class="group-puid">${partnerUserId}<span></p>
             <p><span class="group-info-label">Timeout</span>: <span id="group-info-timeout-${_id}">${timeout}</span></p>
-            <p><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code></p>
+            <p class="tooltip" onclick="copyToClipboard('${loginKey}','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
             <p><span class="group-info-label">Expires</span>: <span id="group-info-expires-${_id}">${expiration}</span></p>
             <div class="auth-links">
                 <div class="agent-join-link"><a href="${agentJoin}" target="_blank">Agent Join Page</a></div>
@@ -77,6 +78,22 @@ const show = function(element){
 
 const showFlex = function(element){
     document.getElementById(element).style.display = "flex"
+}
+
+// Copy to clipboard
+
+var copyToClipboard = function(str, id) {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    document.getElementById(`tooltiptext-${id}`).textContent = "Copied!"
+    document.getElementById(`group-info-loginkey-${id}`).addEventListener("mouseleave", ()=> document.getElementById(`tooltiptext-${id}`).textContent = "Click to copy.")
 }
 
 
@@ -652,3 +669,4 @@ const filter = function() {
         }
     }
 }
+
