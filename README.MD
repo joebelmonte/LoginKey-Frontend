@@ -82,6 +82,10 @@ The following actions are available for each card:
 
 You can also filter by Card Name using the search box below the navigation menu.
 
+Cards with expired keys will display the expiration date/time in red font:
+
+![ScreenShot](/screenshots/expired-key.png)
+
 ## Edit Card
 
 Edit Card brings up the following view:
