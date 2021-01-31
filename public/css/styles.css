@@ -246,6 +246,10 @@ input {
 }
 
 code:hover {
-  color: red;
+  color: green;
   cursor: copy;
+}
+
+.expired {
+  color: red;
 }

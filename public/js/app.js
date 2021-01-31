@@ -10,6 +10,24 @@ if (window.location.hostname === "localhost") {
 
 // HTML
 
+const markExpired = function(group){
+    document.getElementById(`group-info-expires-${group._id}`).classList.add("expired")
+}
+
+const watchExpiration = function(group){
+    var now = new Date() / 1000
+    if (group.timeout <= 86400) {
+        var expirationTimer
+        expirationTimer = setTimeout(markExpired,group.timeout*1000,group)
+        return expirationTimer
+    } else if (group.timeout < now) {
+        markExpired(group)
+    } else {
+        var expiration = group.timeout - now 
+        return setTimeout(markExpired,expiration*1000,group)
+    }
+}
+
 
 const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, timeout, agentJoin, glanceClient, _id}) {
     var expiration = new Date(parseInt(loginKey.split("$")[2])*1000).toString()
@@ -179,6 +197,7 @@ const getGroups = async function() {
                 var groupHTML = generateGroupHTML(group)
                 $("groups").insertAdjacentHTML("beforeend", groupHTML);
             // Add event listeners
+                var expirationTimer = watchExpiration(group)
                 $(`delete-${group._id}`)
                     .addEventListener(
                         "click",
@@ -199,7 +218,9 @@ const getGroups = async function() {
                     .addEventListener(
                         "click",
                         e => {
-                            refreshGroup(group)
+                            refreshGroup(group, expirationTimer).then(data => {
+                                expirationTimer = data
+                            })
                         },
                         false
                     );
@@ -370,7 +391,7 @@ const editGroup = function(group) {
 
 // Refresh Group
 
-var refreshGroup = async function(group){
+var refreshGroup = async function(group, expirationTimer){
     if (parseInt($(`group-info-timeout-${group._id}`).innerHTML) > 86400){
         return alert('Timeout is specified in absolute time. Nothing to refresh.')
     }
@@ -380,9 +401,13 @@ var refreshGroup = async function(group){
     
         $(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
         $(`group-info-expires-${group._id}`).innerHTML = refreshedExpiration
+        clearTimeout(expirationTimer)
+        document.getElementById(`group-info-expires-${group._id}`).classList.remove("expired")
+        return watchExpiration(refreshedGroup.body)
     } catch(e) {
         console.log('There was a problem refreshing the key: ', e)
         alert(`Problem refreshing the key: ${e}`)
+        return expirationTimer
     }
 }
 
