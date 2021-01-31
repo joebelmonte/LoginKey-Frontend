@@ -647,7 +647,7 @@ const hideAll = function(){
 const showGroups = function() {
     hideAll()
     getGroups()
-
+    document.getElementById("searchBox").value = ""
 }
 
 const showNewGroup = function() {
