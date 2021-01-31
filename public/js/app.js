@@ -352,6 +352,7 @@ const editGroup = function(group) {
                 hide("update-group")
                 // Show Groups Div
                 showFlex("groups")
+                show('searchContainer')
             },
             false
           );
