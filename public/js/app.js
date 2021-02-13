@@ -30,7 +30,10 @@ const watchExpiration = function(group){
 
 
 const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, timeout, agentJoin, glanceClient, _id}) {
-    var expiration = new Date(parseInt(loginKey.split("$")[2])*1000).toString()
+    var expires = new Date(parseInt(loginKey.split("$")[2])*1000)
+    var expiration = expires.toString()
+    var expirationHover = expires.toLocaleString()
+
     return `
     <div class="group" id="group-${_id}">
             <h2 class="group-h2">${name}</h2>
@@ -38,7 +41,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
             <p><span class="group-info-label">Partner User ID</span>: <span class="group-puid">${partnerUserId}<span></p>
             <p><span class="group-info-label">Timeout</span>: <span id="group-info-timeout-${_id}">${timeout}</span></p>
             <p class="tooltip" onclick="copyToClipboard('${loginKey}','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
-            <p><span class="group-info-label">Expires</span>: <span id="group-info-expires-${_id}">${expiration}</span></p>
+            <p><span class="group-info-label">Expires</span>: <span title="${expirationHover}" id="group-info-expires-${_id}">${expiration}</span></p>
             <div class="auth-links">
                 <div class="agent-join-link"><a href="${agentJoin}" target="_blank">Agent Join Page</a></div>
                 <div class="glance-client-link"><a href="${glanceClient}" >Glance Client</a></div>
@@ -94,6 +97,7 @@ const show = function(element){
 
 const showFlex = function(element){
     document.getElementById(element).style.display = "flex"
+    filter()
 }
 
 // Copy to clipboard
@@ -227,7 +231,7 @@ const getGroups = async function() {
             
             });
         }
-
+        filter()
     } catch(e) {
         console.log('There was a problem retrieving cards: ', e)
         alert(`Problem retrieving cards: ${e}`)
