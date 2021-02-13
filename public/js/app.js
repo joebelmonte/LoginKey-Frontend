@@ -33,6 +33,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
     var expires = new Date(parseInt(loginKey.split("$")[2])*1000)
     var expiration = expires.toString()
     var expirationHover = expires.toLocaleString()
+
     return `
     <div class="group" id="group-${_id}">
             <h2 class="group-h2">${name}</h2>
@@ -96,6 +97,7 @@ const show = function(element){
 
 const showFlex = function(element){
     document.getElementById(element).style.display = "flex"
+    filter()
 }
 
 // Copy to clipboard
@@ -229,7 +231,7 @@ const getGroups = async function() {
             
             });
         }
-
+        filter()
     } catch(e) {
         console.log('There was a problem retrieving cards: ', e)
         alert(`Problem retrieving cards: ${e}`)
