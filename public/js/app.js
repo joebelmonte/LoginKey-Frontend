@@ -55,7 +55,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
 const generateUpdateGroupHTML = function({_id}) {
     return `
         <div id="update-group-${_id}">
-        <h2>Edit Group</h2>
+        <h2>Edit Card</h2>
         <form>
             <p class="edit-group-label">Group Name:</p>
             <input type="text" id="update-group-name" name="update-group-name" placeholder="Group name"><br>
@@ -250,7 +250,7 @@ const deleteGroup = async function(groupId) {
     }
 }
 
-// Edit Group
+// Edit Card
 
 var getUpdatePayload = function() {
     var payload = {
@@ -329,7 +329,7 @@ const editGroup = function(group) {
     // Hide the Groups Div
     hide("groups")
     hide("searchContainer")
-    // Show the Edit group div
+    // Show the Edit card div
     show("update-group")
     var updateGroupHTML = generateUpdateGroupHTML(group)
     $("update-group").innerHTML = ""
