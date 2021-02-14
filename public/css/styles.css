@@ -191,9 +191,15 @@ input {
   display: none;
 }
 
-#searchContainer {
-  text-align: center;
+#searchArea {
+  width: 40%;
+  margin: auto;
   display: none;
+  text-align: right;
+}
+
+#searchBoxPUID {
+  margin-top: 8px;
 }
 
 #sign-in-about, #sign-up-about {
