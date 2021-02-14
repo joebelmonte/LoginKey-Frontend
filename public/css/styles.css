@@ -191,9 +191,13 @@ input {
   display: none;
 }
 
-#searchContainer {
+#searchArea {
   text-align: center;
   display: none;
+}
+
+#searchBoxPUID {
+  margin-top: 8px;
 }
 
 #sign-in-about, #sign-up-about {

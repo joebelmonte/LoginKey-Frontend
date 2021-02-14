@@ -189,7 +189,7 @@ const getGroups = async function() {
         }
         // if >0 groups, show groups div
         if (groups.body.length > 0) {
-            show('searchContainer')
+            show('searchArea')
             // show groups div
             showFlex("groups")
             // Sort groups array alphabetical by group name
@@ -332,7 +332,7 @@ var apiKeyCheck = async function(groupid) {
 const editGroup = function(group) {
     // Hide the Groups Div
     hide("groups")
-    hide("searchContainer")
+    hide("searchArea")
     // Show the Edit card div
     show("update-group")
     var updateGroupHTML = generateUpdateGroupHTML(group)
@@ -356,7 +356,7 @@ const editGroup = function(group) {
                 hide("update-group")
                 // Show Groups Div
                 showFlex("groups")
-                show('searchContainer')
+                show('searchArea')
             },
             false
           );
@@ -645,7 +645,7 @@ const hideAll = function(){
     hide("update-group")
     hide("user-profile")
     hide('groups')
-    hide('searchContainer')
+    hide('searchArea')
 }
 
 const showGroups = function() {
@@ -685,16 +685,19 @@ $("show-log-out").addEventListener("click",logOut)
 // The Filtering
 
 const filter = function() {
-    var filterTerm = document.getElementById("searchBox").value.toUpperCase()
-    var cardNames = document.getElementsByClassName("group-h2")
     var cards = document.getElementsByClassName("group")
+    var cardNames = document.getElementsByClassName("group-h2")
+    var PUIDs = document.getElementsByClassName("group-puid")
+    var filterForCardName = document.getElementById("searchBox").value.toUpperCase()
+    var filterForPUID = document.getElementById("searchBoxPUID").value.toUpperCase()
+
     for (i = 0; i < cards.length; i++) {
+        cards[i].style.display = "none"
         a = cardNames[i].textContent.toUpperCase()
-        if (a.indexOf(filterTerm) > -1) {
-            cards[i].style.display = "block"
-        } else {
-            cards[i].style.display = "none"
-        }
+        if (a.indexOf(filterForCardName) > -1) {
+            if (PUIDs[i].textContent.toUpperCase().indexOf(filterForPUID) > -1) {
+                cards[i].style.display = "block"
+            }
+        } 
     }
 }
-
