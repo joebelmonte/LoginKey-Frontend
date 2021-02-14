@@ -192,8 +192,10 @@ input {
 }
 
 #searchArea {
-  text-align: center;
+  width: 40%;
+  margin: auto;
   display: none;
+  text-align: right;
 }
 
 #searchBoxPUID {
