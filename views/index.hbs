@@ -20,8 +20,12 @@
             <a href="#" id="show-log-out">Log Out</a>
         </p>
         <div id="searchArea">
-            <div id="searchContainer">Card Name: <input type="text" id="searchBox" onkeyup="filter()" placeholder="Filter by card name..." title="Type in a search term"></div>
-            <div id="searchContainerPUID">PUID: <input type="text" id="searchBoxPUID" onkeyup="filter()" placeholder="Filter by PUID..." title="Type in a search term"></div>
+            <div id="searchContainer"><p class="search-label">Card Name: </p><input type="text" id="searchBox" class="search-field" onkeyup="filter()" placeholder="Filter by card name..." title="Type in a search term"></div>
+            <div id="searchContainerPUID"><p class="search-label">PUID: </p><input type="text" id="searchBoxPUID" class="search-field" onkeyup="filter()" placeholder="Filter by PUID..." title="Type in a search term"></div>
+            <div id="partner-id-select"><p class="search-label">Partner ID: </p> 
+                <select id="partner-id-select-list" class="search-field" onchange="filter()">
+                </select>
+            </div> 
         </div>
     </div>
 

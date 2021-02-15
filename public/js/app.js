@@ -37,7 +37,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
     return `
     <div class="group" id="group-${_id}">
             <h2 class="group-h2">${name}</h2>
-            <p><span class="group-info-label">Partner ID</span>: ${partnerId}</p>
+            <p><span class="group-info-label">Partner ID</span>: <span class="partner-id">${partnerId}</span></p>
             <p><span class="group-info-label">Partner User ID</span>: <span class="group-puid">${partnerUserId}<span></p>
             <p><span class="group-info-label">Timeout</span>: <span id="group-info-timeout-${_id}">${timeout}</span></p>
             <p class="tooltip" onclick="copyToClipboard('${loginKey}','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
@@ -232,6 +232,7 @@ const getGroups = async function() {
             });
         }
         filter()
+        createPartnerIdSelectList()
     } catch(e) {
         console.log('There was a problem retrieving cards: ', e)
         alert(`Problem retrieving cards: ${e}`)
@@ -652,6 +653,8 @@ const showGroups = function() {
     hideAll()
     getGroups()
     document.getElementById("searchBox").value = ""
+    document.getElementById("searchBoxPUID").value = ""
+    createPartnerIdSelectList()
 }
 
 const showNewGroup = function() {
@@ -690,14 +693,64 @@ const filter = function() {
     var PUIDs = document.getElementsByClassName("group-puid")
     var filterForCardName = document.getElementById("searchBox").value.toUpperCase()
     var filterForPUID = document.getElementById("searchBoxPUID").value.toUpperCase()
+    var partnerIdSelected = document.getElementById("partner-id-select-list").value
 
     for (i = 0; i < cards.length; i++) {
         cards[i].style.display = "none"
         a = cardNames[i].textContent.toUpperCase()
         if (a.indexOf(filterForCardName) > -1) {
             if (PUIDs[i].textContent.toUpperCase().indexOf(filterForPUID) > -1) {
-                cards[i].style.display = "block"
+                var partnerIdOfCard = cards[i].getElementsByClassName("partner-id")[0].textContent
+                var selectedPartnerId = document.getElementById("partner-id-select-list").value
+                if (partnerIdOfCard === selectedPartnerId || selectedPartnerId === "All" || !selectedPartnerId) {
+                    cards[i].style.display = "block"
+                }
             }
         } 
     }
+    createPartnerIdSelectList(partnerIdSelected)
 }
+
+
+
+
+// Create Partner ID Select List
+
+function createPartnerIdSelectList(partnerIdSelected){
+
+    var partnerIdSpans = Array.from(document.getElementsByClassName("partner-id"))
+
+    var partnerIdSpansDisplayed = partnerIdSpans.filter(x => x.offsetParent)
+
+    var partnerIds = partnerIdSpansDisplayed.map(x => x.textContent)
+
+    // De-dupe the Partner IDs
+    var uniquePartnerIds = [...new Set(partnerIds)]
+    uniquePartnerIds.sort()
+
+    var partnerIdselectList = document.getElementById("partner-id-select-list")
+    partnerIdselectList.innerHTML=""
+
+    //Create and append the options
+    var option = document.createElement("option");
+    option.value = "All";
+    option.text = "All";
+    partnerIdselectList.appendChild(option);
+
+    for (var i = 0; i < uniquePartnerIds.length; i++) {
+        var option = document.createElement("option");
+        option.value = uniquePartnerIds[i];
+        option.text = uniquePartnerIds[i];
+        partnerIdselectList.appendChild(option);
+    }
+
+    // Select the previously selected element, if applicable
+    if (partnerIdSelected) {
+        for (var i = 0; i < partnerIdselectList.options.length; i++) {
+            if (partnerIdSelected === partnerIdselectList.options[i].textContent) {
+                partnerIdselectList.selectedIndex = i
+            }
+        }
+    }
+}
+

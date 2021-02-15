@@ -192,10 +192,10 @@ input {
 }
 
 #searchArea {
-  width: 40%;
+  width: 41%;
   margin: auto;
   display: none;
-  text-align: right;
+  text-align: center;
 }
 
 #searchBoxPUID {
@@ -258,4 +258,20 @@ code:hover {
 
 .expired {
   color: red;
+}
+
+select#partner-id-select-list {
+  width: 138px;
+  margin-top: 10px;
+  height: 20px;
+}
+
+.search-label {
+  display: inline-block;
+  text-align: center;
+  margin: 5px;
+}
+
+div#searchContainerPUID {
+  padding-left: 44px;
 }
