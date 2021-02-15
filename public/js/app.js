@@ -7,6 +7,14 @@ if (window.location.hostname === "localhost") {
     apiBaseURL = "http://localhost:3000"
 }
 
+// Timeouts
+
+var expirationTimers = []
+
+function clearExpirationTimers() {
+    expirationTimers.forEach(timer => clearTimeout(timer))
+    expirationTimers = []
+}
 
 // HTML
 
@@ -19,12 +27,15 @@ const watchExpiration = function(group){
     if (group.timeout <= 86400) {
         var expirationTimer
         expirationTimer = setTimeout(markExpired,group.timeout*1000,group)
+        expirationTimers.push(expirationTimer)
         return expirationTimer
     } else if (group.timeout < now) {
         markExpired(group)
     } else {
         var expiration = group.timeout - now 
-        return setTimeout(markExpired,expiration*1000,group)
+        var expirationTimer = setTimeout(markExpired,expiration*1000,group)
+        expirationTimers.push(expirationTimer)
+        return expirationTimer
     }
 }
 
@@ -197,11 +208,15 @@ const getGroups = async function() {
             // Clear out HTML of groups div
             $("groups").innerHTML=''
             // Generate html for each group and add to groups div
+            clearExpirationTimers()
             groups.body.forEach(group => {
                 var groupHTML = generateGroupHTML(group)
                 $("groups").insertAdjacentHTML("beforeend", groupHTML);
             // Add event listeners
                 var expirationTimer = watchExpiration(group)
+                // if (expirationTimer){
+                //     expirationTimers.push(expirationTimer)
+                // }
                 $(`delete-${group._id}`)
                     .addEventListener(
                         "click",
