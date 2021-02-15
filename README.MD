@@ -80,7 +80,7 @@ The following actions are available for each card:
 - **Edit Card:** This takes you to the Edit Card view (see below).
 - **Refresh Key:** This will refresh the login key if the timeout is specified in relative time.  If the timeout is specified in absolute time, the app will display a warning message and perform no function.
 
-You can also filter by Card Name using the search box below the navigation menu.
+You can also filter by Card Name, PUID, and Partner ID using the search boxes and select list below the navigation menu.  Cards displayed will meet ALL search criteria specified, with Card Name and PUID being case insensitive.
 
 Cards with expired keys will display the expiration date/time in red font:
 
