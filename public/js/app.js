@@ -262,6 +262,9 @@ const deleteGroup = async function(groupId) {
         try {
             await superagent.delete(`${apiBaseURL}/groups/${groupId}`).set('Authorization', 'Bearer ' + jwt)
             $(`group-${groupId}`).remove()
+            var partnerIdSelected = document.getElementById("partner-id-select-list").value
+            filter()
+            filter() // Need to run this twice in case this is the last card of that partner ID.
             alert('Card deleted.')
         } catch(e) {
             console.log('There was a problem deleting the card: ', e)
@@ -734,9 +737,7 @@ const filter = function() {
 function createPartnerIdSelectList(partnerIdSelected){
 
     var partnerIdSpans = Array.from(document.getElementsByClassName("partner-id"))
-
     var partnerIdSpansDisplayed = partnerIdSpans.filter(x => x.offsetParent)
-
     var partnerIds = partnerIdSpansDisplayed.map(x => x.textContent)
 
     // De-dupe the Partner IDs
@@ -764,7 +765,7 @@ function createPartnerIdSelectList(partnerIdSelected){
         for (var i = 0; i < partnerIdselectList.options.length; i++) {
             if (partnerIdSelected === partnerIdselectList.options[i].textContent) {
                 partnerIdselectList.selectedIndex = i
-            }
+            } 
         }
     }
 }
