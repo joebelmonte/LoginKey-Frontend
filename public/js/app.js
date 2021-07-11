@@ -54,8 +54,8 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
             <p class="tooltip" onclick="copyToClipboard('${loginKey}','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
             <p><span class="group-info-label">Expires</span>: <span title="${expirationHover}" id="group-info-expires-${_id}">${expiration}</span></p>
             <div class="auth-links">
-                <div class="agent-join-link"><a href="${agentJoin}" target="_blank">Agent Join Page</a></div>
-                <div class="glance-client-link"><a href="${glanceClient}" >Glance Client</a></div>
+                <div class="agent-join-link" id="agent-join-link-${_id}"><a href="${agentJoin}" target="_blank">Agent Join Page</a></div>
+                <div class="glance-client-link" id="glance-client-link-${_id}"><a href="${glanceClient}">Glance Client</a></div>
             </div>
             <div class="btn-group">
                 <button class="delete-this-group" id="delete-${_id}">Delete Card</button> 
@@ -425,6 +425,8 @@ var refreshGroup = async function(group, expirationTimer){
     
         $(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
         $(`group-info-expires-${group._id}`).innerHTML = refreshedExpiration
+        $(`agent-join-link-${group._id}`).innerHTML = `<a href="${refreshedGroup.body.agentJoin}" target="_blank">Agent Join Page</a>`
+        $(`glance-client-link-${group._id}`).innerHTML = `<a href="${refreshedGroup.body.glanceClient}" target="_blank">Glance Client</a>`
         clearTimeout(expirationTimer)
         document.getElementById(`group-info-expires-${group._id}`).classList.remove("expired")
         return watchExpiration(refreshedGroup.body)
