@@ -51,7 +51,7 @@ const generateGroupHTML = function({name, partnerId, partnerUserId, loginKey, ti
             <p><span class="group-info-label">Partner ID</span>: <span class="partner-id">${partnerId}</span></p>
             <p><span class="group-info-label">Partner User ID</span>: <span class="group-puid">${partnerUserId}<span></p>
             <p><span class="group-info-label">Timeout</span>: <span id="group-info-timeout-${_id}">${timeout}</span></p>
-            <p class="tooltip" onclick="copyToClipboard('${loginKey}','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
+            <p class="tooltip" onclick="copyToClipboard('loginKey','${_id}')"><span class="group-info-label">Login Key</span>: <code><span id="group-info-loginkey-${_id}">${loginKey}</span></code><span class="tooltiptext" id="tooltiptext-${_id}">Click to copy.</span></p>
             <p><span class="group-info-label">Expires</span>: <span title="${expirationHover}" id="group-info-expires-${_id}">${expiration}</span></p>
             <div class="auth-links">
                 <div class="agent-join-link" id="agent-join-link-${_id}"><a href="${agentJoin}" target="_blank">Agent Join Page</a></div>
@@ -116,6 +116,9 @@ const showFlex = function(element){
 var copyToClipboard = function(str, id) {
     const el = document.createElement('textarea');
     el.value = str;
+    if (str === "loginKey") {
+        el.value = $(`group-info-loginkey-${id}`).innerText
+    }
     el.setAttribute('readonly', '');
     el.style.position = 'absolute';
     el.style.left = '-9999px';
