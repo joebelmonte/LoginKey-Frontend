@@ -275,3 +275,26 @@ select#partner-id-select-list {
 div#searchContainerPUID {
   padding-left: 44px;
 }
+
+/* Loading Modal */
+
+.loader {
+  display:    none;
+  position:   fixed;
+  z-index:    1000;
+  top:        0;
+  left:       0;
+  height:     100%;
+  width:      100%;
+  background: rgba( 255, 255, 255, .8 )
+  url('../gif/FhHRx.gif')
+  50% 50%
+  no-repeat;
+}
+
+body.loading {
+  overflow: hidden;
+}
+body.loading .loader {
+  display: block;
+}
