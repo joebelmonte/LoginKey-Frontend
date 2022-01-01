@@ -12,6 +12,7 @@ LoginKey Front End
   - [Viewing Cards](#viewing-cards)
   - [Edit Card](#edit-card)
   - [Profile](#profile)
+- [Release Notes](#release-notes)
 
 # About
 
@@ -111,3 +112,9 @@ The following actions are available:
 - **Delete All Cards:** This will permanently delete all cards associated with the account.
 - **Logout From All Devices:** This will delete all of the authentication tokens associated with the account, logging the user out of all devices.
 - **Update Email/PW:** This will update the account with the email and/or password specified in the form.
+
+# Release Notes
+
+## January 1, 2022
+
+- Added a `loading` spinner during async requests.

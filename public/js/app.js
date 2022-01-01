@@ -149,7 +149,9 @@ const createGroup = async function(e) {
         delete payload.timeout
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const newGroup = await superagent.post(`${apiBaseURL}/groups`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         $("new-group-name").value = ""
         $("new-group-partnerID").value = ""
         $("new-group-ApiKey").value = ""
@@ -159,6 +161,7 @@ const createGroup = async function(e) {
         hide("new-group")
         getGroups()
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem creating the card: ', e)
         alert(`Problem creating card: ${e}`)
     }
@@ -194,8 +197,10 @@ function sortGroups (a, b) {
 
 const getGroups = async function() {
     try {
+        document.querySelector("body").classList.add("loading")
         const groups = await superagent.get(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
         // if 0 groups, show new group div
+        document.querySelector("body").classList.remove("loading")
         if (groups.body.length === 0) {
             // show new group div
             alert('You have no cards. Try creating one!')
@@ -252,6 +257,7 @@ const getGroups = async function() {
         filter()
         createPartnerIdSelectList()
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem retrieving cards: ', e)
         alert(`Problem retrieving cards: ${e}`)
     }
@@ -263,13 +269,16 @@ const getGroups = async function() {
 const deleteGroup = async function(groupId) {
     if (confirm("Delete card? This cannot be undone.")){
         try {
+            document.querySelector("body").classList.add("loading")
             await superagent.delete(`${apiBaseURL}/groups/${groupId}`).set('Authorization', 'Bearer ' + jwt)
+            document.querySelector("body").classList.remove("loading")
             $(`group-${groupId}`).remove()
             var partnerIdSelected = document.getElementById("partner-id-select-list").value
             filter()
             filter() // Need to run this twice in case this is the last card of that partner ID.
             alert('Card deleted.')
         } catch(e) {
+            document.querySelector("body").classList.remove("loading")
             console.log('There was a problem deleting the card: ', e)
             alert(`Problem deleting card: ${e}`)
         }
@@ -299,10 +308,13 @@ var editGroupSave = async function(groupid) {
         return
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const updatedGroup = await superagent.patch(`${apiBaseURL}/groups/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         $(`update-group-${groupid}`).remove()
         getGroups()
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem saving changes: ', e)
         alert(`Problem saving changes: ${e}`)
     }
@@ -314,7 +326,9 @@ var cloneGroupSave = async function(groupid) {
         return
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const clonedGroup = await superagent.post(`${apiBaseURL}/groups/clone/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         $(`update-group-${groupid}`).remove()
         // Hide update div
         hide("update-group")
@@ -322,6 +336,7 @@ var cloneGroupSave = async function(groupid) {
         showFlex("groups")
         getGroups()
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem cloning the card: ', e)
         alert(`Problem cloning the card: ${e}`)
     }
@@ -338,7 +353,9 @@ var apiKeyCheck = async function(groupid) {
         return
     }
     try {
+        document.querySelector("body").classList.add("loading")
         var checkResult = await superagent.post(`${apiBaseURL}/groups/apikey/confirm/${groupid}`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         if (checkResult.body.match){
             alert('API Key matches!')
         }
@@ -346,6 +363,7 @@ var apiKeyCheck = async function(groupid) {
             alert('API Key does not match.')
         }
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem checking the API Key: ', e)
         alert(`Problem checking the API Key: ${e}`)
     }
@@ -423,7 +441,9 @@ var refreshGroup = async function(group, expirationTimer){
         return alert('Timeout is specified in absolute time. Nothing to refresh.')
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const refreshedGroup = await superagent.get(`${apiBaseURL}/groups/${group._id}`).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         var refreshedExpiration = new Date(parseInt(refreshedGroup.body.loginKey.split("$")[2])*1000).toString()
     
         $(`group-info-loginkey-${group._id}`).innerHTML = refreshedGroup.body.loginKey
@@ -434,6 +454,7 @@ var refreshGroup = async function(group, expirationTimer){
         document.getElementById(`group-info-expires-${group._id}`).classList.remove("expired")
         return watchExpiration(refreshedGroup.body)
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem refreshing the key: ', e)
         alert(`Problem refreshing the key: ${e}`)
         return expirationTimer
@@ -461,7 +482,9 @@ var signUp = async (e) => {
         password
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const response = await superagent.post(`${apiBaseURL}/users`).send(payload)
+        document.querySelector("body").classList.remove("loading")
         // Set the auth token
         jwt = response.body.token
         // clear sign up fields
@@ -472,6 +495,7 @@ var signUp = async (e) => {
         show('nav-bar')
         getGroups()
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem signing up: ', e)
         alert(`Problem signing up: ${e}`)
     }
@@ -507,7 +531,9 @@ var signIn = async (e) => {
         password
     }
     try {
+        document.querySelector("body").classList.add("loading")
         const response = await superagent.post(`${apiBaseURL}/users/login`).send(payload)
+        document.querySelector("body").classList.remove("loading")
         // Set the auth token
         jwt = response.body.token
         // clear sign in fields
@@ -519,6 +545,7 @@ var signIn = async (e) => {
         // request groups
         getGroups()
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         alert(`Problem signing in: ${e}`)
         console.log('Problem signing in: ', e)
     }
@@ -550,7 +577,9 @@ const deleteAccount = async function(e) {
         return
     }
     try {
+        document.querySelector("body").classList.add("loading")
         await superagent.delete(`${apiBaseURL}/users/me`).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         alert('Account deleted.')
         $("groups").innerHTML=''
         hideAll()
@@ -558,6 +587,7 @@ const deleteAccount = async function(e) {
         jwt = ''
         show("sign-in")
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem deleting your account: ', e)
         alert(`Problem deleting account: ${e}`)
     }
@@ -569,10 +599,13 @@ const deleteAllGroups = async function(e) {
         return
     }
     try {
+        document.querySelector("body").classList.add("loading")
         await superagent.delete(`${apiBaseURL}/groups`).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         alert('All cards deleted.')
         $("groups").innerHTML = ''
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('Problem deleting all groups: ', e)
         alert(`Problem deleting groups: ${e}`)
     }
@@ -581,7 +614,9 @@ const deleteAllGroups = async function(e) {
 const logoutAll = async function(e) {
     e.preventDefault()
     try {
+        document.querySelector("body").classList.add("loading")
         await superagent.post(`${apiBaseURL}/users/logoutAll`).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         alert('You have been logged out of all devices.')
         // clear update user fields
         $("update-username").value = ""
@@ -592,6 +627,7 @@ const logoutAll = async function(e) {
         jwt = ''
         show("sign-in")
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem logging out all: ', e)
         alert(`Problem logging out all: ${e}`)
     }
@@ -615,16 +651,17 @@ const updateUserSave = async function(e){
         }
         payload.password = password
     }
-
-
     try {
+        document.querySelector("body").classList.add("loading")
         const updatedUser = await superagent.patch(`${apiBaseURL}/users/me`).send(payload).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
         // clear update user fields
         $("update-username").value = ""
         $("update-password").value = ""
         $("update-password-confirm").value = ""
         alert('Account updated.')
     } catch(e){
+        document.querySelector("body").classList.remove("loading")
         console.log('There was a problem updating: ', e)
         alert(`Problem updating: ${e}`)
     }
@@ -694,8 +731,11 @@ const logOut = async function() {
     hideAll()
     hide("nav-bar")
     try {
+        document.querySelector("body").classList.add("loading")
         const clonedGroup = await superagent.post(`${apiBaseURL}/users/logout`).set('Authorization', 'Bearer ' + jwt)
+        document.querySelector("body").classList.remove("loading")
     } catch(e) {
+        document.querySelector("body").classList.remove("loading")
         console.log('Problem logging out: ', e)
         alert(`Problem logging out: ${e}`)
     }
