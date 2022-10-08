@@ -1,105 +1,231 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="/css/styles.css">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"></script>
-    <script src="https://cdn.jsdelivr.net/npm/superagent"></script>
-	<link rel="icon" type="image/png" href="https://ww2.glance.net/favicon-96x96.png" sizes="96x96" />
-	<link rel="icon" type="image/png" href="https://ww2.glance.net/favicon-32x32.png" sizes="32x32" />
-	<link rel="icon" type="image/png" href="https://ww2.glance.net/favicon-16x16.png" sizes="16x16" />
+  <head>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script
+      src="https://polyfill.io/v3/polyfill.min.js?features=Array.from,Promise,Symbol,Object.setPrototypeOf,Object.getOwnPropertySymbols"
+    ></script>
+    <script src="hhttps://cdn.jsdelivr.net/npm/superagent@8.0.0"></script>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ww2.glance.net/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ww2.glance.net/favicon-32x32.png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://ww2.glance.net/favicon-16x16.png"
+      sizes="16x16"
+    />
 
-</head>
-<body>
+  </head>
+  <body>
     <div id="header">
-        <h1>LoginKey Generator</h1>
-            <p id="nav-bar">
-            <a href="#" id="show-groups">Cards</a>
-            <a href="#" id="show-new-group">New Card</a>
-            <a href="#" id="show-profile">Profile</a>
-            <a href="https://github.com/joebelmonte/LoginKey-Frontend" target="_blank" id="about">About</a>
-            <a href="#" id="show-log-out">Log Out</a>
-        </p>
-        <div id="searchArea">
-            <div id="searchContainer"><p class="search-label">Card Name: </p><input type="text" id="searchBox" class="search-field" onkeyup="filter()" placeholder="Filter by card name..." title="Type in a search term"></div>
-            <div id="searchContainerPUID"><p class="search-label">PUID: </p><input type="text" id="searchBoxPUID" class="search-field" onkeyup="filter()" placeholder="Filter by PUID..." title="Type in a search term"></div>
-            <div id="partner-id-select"><p class="search-label">Partner ID: </p> 
-                <select id="partner-id-select-list" class="search-field" onchange="filter()">
-                </select>
-            </div> 
+      <h1>LoginKey Generator</h1>
+      <p id="nav-bar">
+        <a href="#" id="show-groups">Cards</a>
+        <a href="#" id="show-new-group">New Card</a>
+        <a href="#" id="show-profile">Profile</a>
+        <a
+          href="https://github.com/joebelmonte/LoginKey-Frontend"
+          target="_blank"
+          id="about"
+        >About</a>
+        <a href="#" id="show-log-out">Log Out</a>
+      </p>
+      <div id="searchArea">
+        <div id="searchContainer"><p class="search-label">Card Name: </p><input
+            type="text"
+            id="searchBox"
+            class="search-field"
+            onkeyup="filter()"
+            placeholder="Filter by card name..."
+            title="Type in a search term"
+          /></div>
+        <div id="searchContainerPUID"><p class="search-label">PUID: </p><input
+            type="text"
+            id="searchBoxPUID"
+            class="search-field"
+            onkeyup="filter()"
+            placeholder="Filter by PUID..."
+            title="Type in a search term"
+          /></div>
+        <div id="partner-id-select"><p class="search-label">Partner ID: </p>
+          <select
+            id="partner-id-select-list"
+            class="search-field"
+            onchange="filter()"
+          >
+          </select>
         </div>
+      </div>
     </div>
 
     <div id="sign-up">
-        <h2>Sign Up</h2>
-        <form>
-            <input type="text" id="sign-up-email" name="sign-up-email" placeholder="email" autocomplete="username" required><br>
-            <input type="password" id="sign-up-password" name="sign-up-password" placeholder="password (min 6 characters)" autocomplete="new-password" required><br>
-            <input type="password" id="confirm-password" name="confirm-password" placeholder="confirm password" autocomplete="new-password" required><br>
-            <div class="btn-group">
-                <button id="cancel-sign-up">Cancel</button>
-                <button id="sign-up-button">Sign Up</button> 
-            </div>
-        </form>
-        <div id="sign-up-about">
-            <a href="https://github.com/joebelmonte/LoginKey-Frontend" target="_blank" id="about">About</a>
-        </div>
-    </div> 
-    <div id="sign-in">
-        <h2>Sign In</h2>
-        <form>
-            <input type="text" id="sign-in-email" name="sign-in-email" placeholder="email" autocomplete="username" required><br>
-            <input type="password" id="sign-in-password" name="sign-in-password" placeholder="password" autocomplete="curent-password" required><br>
-            <div class="btn-group">
-                <button id="clear-sign-in">Clear</button>
-                <button id="sign-in-button">Sign In</button><br><br>
-                <button id="create-account">Create Account</button>
-            </div>
-        </form>
-        <div id="sign-in-about">
-            <a href="https://github.com/joebelmonte/LoginKey-Frontend" target="_blank" id="about">About</a>
-        </div>
-    </div>  
-    <div id="new-group">
-        <h2>Create a Card</h2>
-        <form>
-            <p class="new-group-label">Group Name:</p>
-            <input type="text" id="new-group-name" name="new-group-name" placeholder="Group name"><br>
-            <p class="new-group-label">Partner ID:</p>
-            <input type="number" id="new-group-partnerID" name="new-group-partnerID" placeholder="Partner ID"><br>
-            <p class="new-group-label">API Key:</p>
-            <input type="password" id="new-group-ApiKey" name="new-group-ApiKey" placeholder="API Key" autocomplete="none"><br>
-            <p class="new-group-label">Partner User ID:</p>
-            <input type="text" id="new-group-PUID" name="new-group-PUID" placeholder="Partner User ID"><br>
-            <p class="new-group-label">Timeout:</p>
-            <input type="number" id="new-group-timeout" name="new-group-timeout" placeholder="Seconds from now or absolute time (UTC)"><br>
+      <h2>Sign Up</h2>
+      <form>
+        <input
+          type="text"
+          id="sign-up-email"
+          name="sign-up-email"
+          placeholder="email"
+          autocomplete="username"
+          required
+        /><br />
+        <input
+          type="password"
+          id="sign-up-password"
+          name="sign-up-password"
+          placeholder="password (min 6 characters)"
+          autocomplete="new-password"
+          required
+        /><br />
+        <input
+          type="password"
+          id="confirm-password"
+          name="confirm-password"
+          placeholder="confirm password"
+          autocomplete="new-password"
+          required
+        /><br />
         <div class="btn-group">
-            <button id="new-group-clear-button">Clear</button>
-            <button id="new-group-save-button">Save</button> 
+          <button id="cancel-sign-up">Cancel</button>
+          <button id="sign-up-button">Sign Up</button>
         </div>
-        </form>
-    </div> 
+      </form>
+      <div id="sign-up-about">
+        <a
+          href="https://github.com/joebelmonte/LoginKey-Frontend"
+          target="_blank"
+          id="about"
+        >About</a>
+      </div>
+    </div>
+    <div id="sign-in">
+      <h2>Sign In</h2>
+      <form>
+        <input
+          type="text"
+          id="sign-in-email"
+          name="sign-in-email"
+          placeholder="email"
+          autocomplete="username"
+          required
+        /><br />
+        <input
+          type="password"
+          id="sign-in-password"
+          name="sign-in-password"
+          placeholder="password"
+          autocomplete="curent-password"
+          required
+        /><br />
+        <div class="btn-group">
+          <button id="clear-sign-in">Clear</button>
+          <button id="sign-in-button">Sign In</button><br /><br />
+          <button id="create-account">Create Account</button>
+        </div>
+      </form>
+      <div id="sign-in-about">
+        <a
+          href="https://github.com/joebelmonte/LoginKey-Frontend"
+          target="_blank"
+          id="about"
+        >About</a>
+      </div>
+    </div>
+    <div id="new-group">
+      <h2>Create a Card</h2>
+      <form>
+        <p class="new-group-label">Group Name:</p>
+        <input
+          type="text"
+          id="new-group-name"
+          name="new-group-name"
+          placeholder="Group name"
+        /><br />
+        <p class="new-group-label">Partner ID:</p>
+        <input
+          type="number"
+          id="new-group-partnerID"
+          name="new-group-partnerID"
+          placeholder="Partner ID"
+        /><br />
+        <p class="new-group-label">API Key:</p>
+        <input
+          type="password"
+          id="new-group-ApiKey"
+          name="new-group-ApiKey"
+          placeholder="API Key"
+          autocomplete="none"
+        /><br />
+        <p class="new-group-label">Partner User ID:</p>
+        <input
+          type="text"
+          id="new-group-PUID"
+          name="new-group-PUID"
+          placeholder="Partner User ID"
+        /><br />
+        <p class="new-group-label">Timeout:</p>
+        <input
+          type="number"
+          id="new-group-timeout"
+          name="new-group-timeout"
+          placeholder="Seconds from now or absolute time (UTC)"
+        /><br />
+        <div class="btn-group">
+          <button id="new-group-clear-button">Clear</button>
+          <button id="new-group-save-button">Save</button>
+        </div>
+      </form>
+    </div>
     <div id="update-group">
     </div>
     <div id="user-profile">
-        <h2>Update Profile</h2>
-        <form>
-            <input type="text" id="update-username" name="update-username" placeholder="Update email" autocomplete="username"><br>
-            <input type="password" id="update-password" name="update-password" placeholder="Password" autocomplete="new-password"><br>
-            <input type="password" id="update-password-confirm" name="update-password-confirm" placeholder="Confirm Password" autocomplete="new-password"><br>
+      <h2>Update Profile</h2>
+      <form>
+        <input
+          type="text"
+          id="update-username"
+          name="update-username"
+          placeholder="Update email"
+          autocomplete="username"
+        /><br />
+        <input
+          type="password"
+          id="update-password"
+          name="update-password"
+          placeholder="Password"
+          autocomplete="new-password"
+        /><br />
+        <input
+          type="password"
+          id="update-password-confirm"
+          name="update-password-confirm"
+          placeholder="Confirm Password"
+          autocomplete="new-password"
+        /><br />
         <div class="btn-group">
-            <button id="delete-account">Delete Account</button>
-            <button id="delete-all-groups-button">Delete All Cards</button> 
-            <button id="logout-all">Logout From All Devices</button> 
-            <button id="update-user-save-button">Update Email/PW</button><br><br>
-            <button id="update-user-cancel-button">Clear Fields</button>
+          <button id="delete-account">Delete Account</button>
+          <button id="delete-all-groups-button">Delete All Cards</button>
+          <button id="logout-all">Logout From All Devices</button>
+          <button id="update-user-save-button">Update Email/PW</button><br /><br
+          />
+          <button id="update-user-cancel-button">Clear Fields</button>
         </div>
-        </form>
+      </form>
     </div>
-     <div id="groups">
+    <div id="groups">
     </div>
-{{!-- <script type="module" src="/js/config.js"></script> --}}
-<div class="loader"><!-- Place at bottom of page --></div>
-<script type="text/javascript" src="/js/app.js"></script>
-</body>
+    {{! <script type="module" src="/js/config.js"></script> }}
+    <div class="loader"><!-- Place at bottom of page --></div>
+    <script type="text/javascript" src="/js/app.js"></script>
+  </body>
 
-</html> 
+</html>
